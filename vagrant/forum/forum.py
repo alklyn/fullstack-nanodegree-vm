@@ -78,7 +78,7 @@ def Post(env, resp):
         content = content.strip()
         if content:
             #Sanitize user input
-            bleach.clean(content)
+            content = bleach.clean(content)
             # Save it in the database
             forumdb.AddPost(content)
     # 302 redirect back to the main page

@@ -24,7 +24,7 @@ def GetAllPosts():
     query = '''
     select content, time
     from posts
-    order by time
+    order by time desc
     '''
     cur.execute(query)
     posts = cur.fetchall()

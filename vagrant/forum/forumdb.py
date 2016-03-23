@@ -1,11 +1,13 @@
 #
 # Database access functions for the web forum.
-# 
+#
 
 import time
+import psycopg2
+import psycopg2.extras
 
-## Database connection
-DB = []
+
+
 
 ## Get posts from database.
 def GetAllPosts():
@@ -16,8 +18,20 @@ def GetAllPosts():
       pointing to the post content, and 'time' key pointing to the time
       it was posted.
     '''
-    posts = [{'content': str(row[1]), 'time': str(row[0])} for row in DB]
-    posts.sort(key=lambda row: row['time'], reverse=True)
+    ## Database connection
+    DB = psycopg2.connect("dbname=forum")
+    cur = DB.cursor(cursor_factory = psycopg2.extras.DictCursor)
+    query = '''
+    select content, time
+    from posts
+    order by time
+    '''
+    cur.execute(query)
+    posts = cur.fetchall()
+    #posts = [{'content': str(row[1]), 'time': str(row[0])} for row in DB]
+    #posts.sort(key=lambda row: row['time'], reverse=True)
+    DB.close()
+    print(posts)
     return posts
 
 ## Add a post to the database.
@@ -27,5 +41,15 @@ def AddPost(content):
     Args:
       content: The text content of the new post.
     '''
-    t = time.strftime('%c', time.localtime())
-    DB.append((t, content))
+    ## Database connection
+    DB = psycopg2.connect("dbname=forum")
+    cur = DB.cursor()
+    t = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    query = '''
+    insert
+    into posts(content) values(%s)
+    '''
+    query = query.format(new_content = content, t_stamp = t)
+    cur.execute(query, (content,))
+    DB.commit()
+    DB.close()

@@ -1,0 +1,12 @@
+tables neded
+
+tournament: 
+id serial, name string, start_date datetime , end_date datetime
+
+players: 
+id serial, name string,  surname string,  registration_date datetime
+
+matches:
+tournament_id , date datetime, player1_id, player2_id, player1,_score, player2_score
+
+

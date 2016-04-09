@@ -7,6 +7,6 @@ players:
 id serial, name string,  surname string,  registration_date datetime
 
 matches:
-tournament_id , date datetime, player1_id, player2_id, player1,_score, player2_score
+tournament_id , date datetime, player1_id, player2_id, player1_score, player2_score
 
 

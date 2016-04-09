@@ -11,10 +11,11 @@ create table tournaments(
     name text,
     start_date date,
     end_date date
-)
+);
 
 create table players(
     id serial primary key,
+    tournament_id integer references tournaments(id),
     name text,
     surname text,
 );
@@ -26,4 +27,4 @@ create table matches(
     player1_score integer,
     player2_score integer,
     primary key (tournament_id, player1_id, player2_id)
-)
+);

@@ -6,7 +6,7 @@
 -- You can write comments in this file by starting them with two dashes, like
 -- these lines here.
 
-create table tournament(
+create table tournaments(
     id serial primary key,
     name text,
     start_date date,
@@ -17,12 +17,13 @@ create table players(
     id serial primary key,
     name text,
     surname text,
-)
+);
 
 create table matches(
-    tournament_id integer,
-    player1_id integer,
-    player2_id integer,
+    tournament_id integer references tournaments(id),
+    player1_id integer references players(id),
+    player2_id integer references players(id),
     player1_score integer,
-    player2_score integer
+    player2_score integer,
+    primary key (tournament_id, player1_id, player2_id)
 )

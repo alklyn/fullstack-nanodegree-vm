@@ -22,8 +22,7 @@ create table players(
 );
 
 create table matches(
-    player1_id integer references players(id),
-    player2_id integer references players(id),
-    winner integer,
-    primary key (player1_id, player2_id)
+    winner integer references players(id),
+    loser integer references players(id),
+    primary key (winner, loser)
 );

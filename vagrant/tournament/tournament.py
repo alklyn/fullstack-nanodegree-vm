@@ -37,7 +37,9 @@ def countPlayers():
     cur = conn.cursor()
     query = "select count(*) from players;"
     cur.execute(query)
+    row = cur.fetchone()
     conn.close()
+    return row[0]
 
 
 def registerPlayer(name):

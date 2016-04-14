@@ -72,6 +72,19 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
+    conn = connect()
+    cur = conn.cursor()
+    query = """
+    select players.id, players.name, count(matches.winner) as wins
+    from players left join matches on players.id = matches.winner
+    group by players.id
+    order by wins desc
+    """
+    cur.execute(query)
+    data = cur.fetchall()
+    conn.close()
+    return data
+
 
 
 def reportMatch(winner, loser):
@@ -81,6 +94,13 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
+    conn = connect()
+    cur = conn.cursor()
+    query = "insert into matches(winner, loser) values(%s, %s);"
+    cur.execute(query, (winner, loser))
+    conn.commit()
+    conn.close()
+
 
 
 def swissPairings():

@@ -75,10 +75,11 @@ def playerStandings():
     conn = connect()
     cur = conn.cursor()
     query = """
-    select players.id, players.name, count(matches.winner) as wins
-    from players left join matches on players.id = matches.winner
-    group by players.id
-    order by wins desc
+    select winners.id, winners.name, count(matches.loser) as losses
+    from winners
+    left join matches on winners.id = matches.loser
+    group by winners.id
+    order by winners.wins desc;
     """
     cur.execute(query)
     data = cur.fetchall()

@@ -26,3 +26,10 @@ create table matches(
     loser integer references players(id),
     primary key (winner, loser)
 );
+
+create view winners as
+select players.id, players.name, count(matches.winner) as wins
+from players
+left join matches on players.id = matches.winner
+group by players.id
+order by wins desc;

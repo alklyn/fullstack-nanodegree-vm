@@ -33,3 +33,24 @@ from players
 left join matches on players.id = matches.winner
 group by players.id
 order by wins desc;
+
+create view losers as
+select players.id, players.name, count(matches.loser) as losses
+from players
+left join matches on players.id = matches.loser
+group by players.id
+order by losses desc;
+
+create view standings as
+select winners.id, winners.name, winners.wins, winners.wins + losers.losses as played
+from winners, losers
+where winners.id = losers.id
+order by winners.wins desc;
+
+select p.id, p.name, p.wins, p.wins + coalesce(l.losses, 0) as played from
+results
+(
+select loser, count(loser) as losses
+from matches
+group by loser
+) as l on p.id = l.loser;

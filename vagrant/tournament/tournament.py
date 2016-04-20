@@ -75,7 +75,6 @@ def playerStandings():
     conn = connect()
     cur = conn.cursor()
     query = "select * from standings;"
-
     cur.execute(query)
     data = cur.fetchall()
     conn.close()
@@ -114,3 +113,13 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
+    conn = connect()
+    cur = conn.cursor()
+    query = "select id, name from standings;"
+    cur.execute(query)
+    temp = cur.fetchall()
+    conn.close()
+    data = list()
+    for index in range(0, len(temp), 2):
+        data.append(temp[index] + temp[index + 1])
+    return data

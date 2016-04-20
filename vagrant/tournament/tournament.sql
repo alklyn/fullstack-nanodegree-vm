@@ -46,11 +46,3 @@ select winners.id, winners.name, winners.wins, winners.wins + losers.losses as p
 from winners, losers
 where winners.id = losers.id
 order by winners.wins desc;
-
-select p.id, p.name, p.wins, p.wins + coalesce(l.losses, 0) as played from
-results
-(
-select loser, count(loser) as losses
-from matches
-group by loser
-) as l on p.id = l.loser;

@@ -7,26 +7,26 @@
 -- these lines here.
 -- Use the command \i tournament.sql to import the whole file into psql at once.
 
-/*
+drop table if exists tournaments;
 create table tournaments(
     id serial primary key,
-    name text,
-    start_date date,
-    end_date date
+    name text
 );
-*/
 
+drop table if exists players;
 create table players(
     id serial primary key,
     name text
 );
 
+drop table if exists matches;
 create table matches(
     winner integer references players(id),
     loser integer references players(id),
     primary key (winner, loser)
 );
 
+drop view if exists winners;
 create view winners as
 select players.id, players.name, count(matches.winner) as wins
 from players
@@ -34,6 +34,7 @@ left join matches on players.id = matches.winner
 group by players.id
 order by wins desc;
 
+drop view if exists losers;
 create view losers as
 select players.id, players.name, count(matches.loser) as losses
 from players
@@ -41,6 +42,7 @@ left join matches on players.id = matches.loser
 group by players.id
 order by losses desc;
 
+drop view if exists standings;
 create view standings as
 select winners.id, winners.name, winners.wins, winners.wins + losers.losses as played
 from winners, losers

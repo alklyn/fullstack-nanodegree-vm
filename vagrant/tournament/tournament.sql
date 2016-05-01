@@ -7,6 +7,11 @@
 -- these lines here.
 -- Use the command \i tournament.sql to import the whole file into psql at once.
 
+drop database if exists tournament;
+create database tournament;
+
+\c tournament
+
 drop table if exists tournaments;
 create table tournaments(
     id serial primary key,
@@ -16,14 +21,16 @@ create table tournaments(
 drop table if exists players;
 create table players(
     id serial primary key,
+    tournament_id integer references tournaments(id) on delete cascade,
     name text
 );
 
 drop table if exists matches;
 create table matches(
-    winner integer references players(id),
-    loser integer references players(id),
-    primary key (winner, loser)
+    tournament_id integer references tournaments(id) on delete cascade,
+    winner integer references players(id) on delete cascade,
+    loser integer references players(id) on delete cascade,
+    primary key (tournament_id, winner, loser)
 );
 
 drop view if exists winners;

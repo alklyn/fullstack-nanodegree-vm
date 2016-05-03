@@ -26,11 +26,20 @@ create table players(
 );
 
 drop table if exists matches;
+/*
+Points are awarded as follows
+win: 2
+loss: 0
+draw: 1
+*/
 create table matches(
     tournament_id integer references tournaments(id) on delete cascade,
-    winner integer references players(id) on delete cascade,
-    loser integer references players(id) on delete cascade,
-    primary key (tournament_id, winner, loser)
+    player1_id integer references players(id) on delete cascade,
+    player2_id integer references players(id) on delete cascade,
+    player1_points integer check(player1_points >= 0 and player1_points <= 2),
+    player2_points integer check(player2_points >= 0 and player2_points <= 2),
+    primary key (tournament_id, player1_id, loser),
+    check (player1_points + player2_points == 2)
 );
 
 drop view if exists winners;

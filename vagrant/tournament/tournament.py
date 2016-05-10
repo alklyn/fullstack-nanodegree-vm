@@ -42,7 +42,7 @@ def countPlayers():
     return row[0]
 
 
-def registerPlayer(name):
+def registerPlayer(name, tournament_id = 1):
     """Adds a player to the tournament database.
 
     The database assigns a unique serial id number for the player.  (This
@@ -53,13 +53,13 @@ def registerPlayer(name):
     """
     conn = connect()
     cur = conn.cursor()
-    query = "insert into players(name) values(%s);"
-    cur.execute(query, (name, ))
+    query = "insert into players(tournament_id, name) values(%s, %s);"
+    cur.execute(query, (tournament_id, name))
     conn.commit()
     conn.close()
 
 
-def playerStandings():
+def playerStandings(tournament_id = 1):
     """Returns a list of the players and their win records, sorted by wins.
 
     The first entry in the list should be the player in first place, or a player
@@ -74,15 +74,15 @@ def playerStandings():
     """
     conn = connect()
     cur = conn.cursor()
-    query = "select * from standings;"
-    cur.execute(query)
+    query = "select * from standings where tournament_id = %s;"
+    cur.execute(query, (tournament_id, ))
     data = cur.fetchall()
     conn.close()
     return data
 
 
 
-def reportMatch(winner, loser):
+def reportMatch(winner, loser, tournament_id = 1):
     """Records the outcome of a single match between two players.
 
     Args:
@@ -91,8 +91,8 @@ def reportMatch(winner, loser):
     """
     conn = connect()
     cur = conn.cursor()
-    query = "insert into matches(winner, loser) values(%s, %s);"
-    cur.execute(query, (winner, loser))
+    query = "insert into matches(winner, loser, tournament_id) values(%s, %s, %s);"
+    cur.execute(query, (winner, loser, tournament_id))
     conn.commit()
     conn.close()
 

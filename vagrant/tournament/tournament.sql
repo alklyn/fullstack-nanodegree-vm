@@ -42,36 +42,23 @@ create table matches(
     check (player1_points + player2_points = 2)
 );
 
-drop view if exists player1_wins;
-create view player1_wins as
-select players.id, players.name, count(matches.player1_points) as wins
+drop view if exists player1_points;
+create view player1_points as
+select players.id, players.name, coalesce(matches.player1_points, 0) as points
 from players
 left join matches on players.id = matches.player1_id
-where player1_points = 2
-group by players.id
-order by wins desc;
+order by player1_points desc;
 
-drop view if exists player2_wins;
-create view player2_wins as
-select players.id, players.name, count(matches.player2_points) as wins
+drop view if exists player2_points;
+create view player2_points as
+select players.id, players.name, coalesce(matches.player2_points, 0) as points
 from players
 left join matches on players.id = matches.player2_id
-where player2_points = 2
-group by players.id
-order by wins desc;
+order by player2_points desc;
 
-drop view
-drop view if exists losers;
-create view losers as
-select players.id, players.name, count(matches.loser) as losses
-from players
-left join matches on players.id = matches.loser
-group by players.id
-order by losses desc;
-
-drop view if exists standings;
-create view standings as
-select winners.id, winners.name, winners.wins, winners.wins + losers.losses as played
-from winners, losers
-where winners.id = losers.id
-order by winners.wins desc;
+drop view if exists totals;
+create view totals as
+select player1_points.id, player1_points.name, player1_points.points + player2_points.points as totals
+from player1_points inner join
+player2_points on player1_points.id = player2_points.id
+order by totals desc;

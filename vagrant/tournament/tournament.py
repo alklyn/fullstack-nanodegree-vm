@@ -74,8 +74,8 @@ def playerStandings(tournament_id = 1):
     """
     conn = connect()
     cur = conn.cursor()
-    query = "select * from standings where tournament_id = %s;"
-    cur.execute(query, (tournament_id, ))
+    query = "select * from standings;"
+    cur.execute(query)
     data = cur.fetchall()
     conn.close()
     return data
@@ -91,8 +91,8 @@ def reportMatch(winner, loser, tournament_id = 1):
     """
     conn = connect()
     cur = conn.cursor()
-    query = "insert into matches(winner, loser, tournament_id) values(%s, %s, %s);"
-    cur.execute(query, (winner, loser, tournament_id))
+    query = "insert into matches(tournament_id, player1_id, player2_id, player1_points, player2_points) values(%s, %s, %s, %s, %s);"
+    cur.execute(query, (tournament_id, winner, loser, 2, 0))
     conn.commit()
     conn.close()
 

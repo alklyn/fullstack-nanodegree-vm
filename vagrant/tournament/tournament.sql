@@ -15,50 +15,40 @@ create database tournament;
 drop table if exists tournaments;
 create table tournaments(
     tournament_id serial primary key,
-    name text
+    name text not null
 );
 
 drop table if exists players;
 create table players(
     id serial primary key,
     tournament_id integer references tournaments(tournament_id) on delete cascade,
-    name text
+    name text not null
 );
 
-drop table if exists matches;
+drop table if exists results;
 /*
 Points are awarded as follows
 win: 2
 loss: 0
 draw: 1
 */
-create table matches(
+create table results(
+    results_id serial primary key,
     tournament_id integer references tournaments(tournament_id) on delete cascade,
-    player1_id integer references players(id) on delete cascade,
-    player2_id integer references players(id) on delete cascade,
-    player1_points integer check(player1_points >= 0 and player1_points <= 2),
-    player2_points integer check(player2_points >= 0 and player2_points <= 2),
-    primary key (tournament_id, player1_id, player2_id),
-    check (player1_points + player2_points = 2)
+    match_id integer not null,
+    player_id integer references players(id) on delete cascade,
+    points integer not null
 );
 
-drop view if exists player1_points;
-create view player1_points as
-select players.id, players.name, coalesce(matches.player1_points, 0) as points
-from players
-left join matches on players.id = matches.player1_id
-order by player1_points desc;
+drop view if exists stats;
+create view stats as
+    select player_id, sum(points) as points, count(*) as matches
+    from results
+    group by player_id
+    order by points desc;
 
-drop view if exists player2_points;
-create view player2_points as
-select players.id, players.name, coalesce(matches.player2_points, 0) as points
-from players
-left join matches on players.id = matches.player2_id
-order by player2_points desc;
-
-drop view if exists totals;
-create view totals as
-select player1_points.id, player1_points.name, player1_points.points + player2_points.points as totals
-from player1_points inner join
-player2_points on player1_points.id = player2_points.id
-order by totals desc;
+drop view if exists standings;
+create view standings as
+    select players.id, players.name, coalesce(stats.points, 0) as wins, coalesce(stats.matches, 0) as matches
+    from players left join stats on players.id = stats.player_id
+    order by wins desc;

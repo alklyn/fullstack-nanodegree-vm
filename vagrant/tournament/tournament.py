@@ -80,6 +80,16 @@ def playerStandings(tournament_id = 1):
     conn.close()
     return data
 
+def new_match_id():
+    """Generate a new match id for saving match results"""
+    conn = connect()
+    cur = conn.cursor()
+    query = "select coalesce(max(match_id), 0) + 1 as new_match_id from results;"
+    cur.execute(query)
+    data = cur.fetchone()
+    conn.close()
+    return data[0]
+
 
 
 def reportMatch(winner, loser, tournament_id = 1):
@@ -89,9 +99,10 @@ def reportMatch(winner, loser, tournament_id = 1):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
+    match_id = new_match_id()
     conn = connect()
     cur = conn.cursor()
-    query = "insert into matches(tournament_id, player1_id, player2_id, player1_points, player2_points) values(%s, %s, %s, %s, %s);"
+    query = "insert into results(tournament_id, match_id, player_id, points) values(%s, %s, %s, %s);"
     cur.execute(query, (tournament_id, winner, loser, 2, 0))
     conn.commit()
     conn.close()

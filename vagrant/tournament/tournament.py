@@ -15,7 +15,7 @@ def deleteMatches():
     """Remove all the match records from the database."""
     conn = connect()
     cur = conn.cursor()
-    query = "delete from matches;"
+    query = "delete from results;"
     cur.execute(query)
     conn.commit()
     conn.close()
@@ -99,11 +99,12 @@ def reportMatch(winner, loser, tournament_id = 1):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-    match_id = new_match_id()
+    match = new_match_id()
     conn = connect()
     cur = conn.cursor()
     query = "insert into results(tournament_id, match_id, player_id, points) values(%s, %s, %s, %s);"
-    cur.execute(query, (tournament_id, winner, loser, 2, 0))
+    cur.execute(query, (tournament_id, match, winner, 2))
+    cur.execute(query, (tournament_id, match + 1, loser, 0))
     conn.commit()
     conn.close()
 

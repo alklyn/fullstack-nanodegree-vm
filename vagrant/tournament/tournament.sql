@@ -64,6 +64,7 @@ create view view_draws as
     group by results.player_id
     order by draws desc;
 
+drop view if exists standings; 
 create view standings as
     select players.id, players.name, coalesce(view_winners.wins, 0) as wins,
     coalesce(view_winners.wins, 0) + coalesce(view_losers.losses, 0) as matches

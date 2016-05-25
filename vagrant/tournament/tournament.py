@@ -11,6 +11,16 @@ def connect():
     return psycopg2.connect("dbname=tournament")
 
 
+def deleteTournaments():
+    """Remove all the tournament records from the database."""
+    conn = connect()
+    cur = conn.cursor()
+    query = "delete from tournaments;"
+    cur.execute(query)
+    conn.commit()
+    conn.close()
+
+
 def deleteMatches():
     """Remove all the match records from the database."""
     conn = connect()
@@ -40,6 +50,19 @@ def countPlayers():
     row = cur.fetchone()
     conn.close()
     return row[0]
+
+
+def registerTournament(name):
+    """Adds a tournament to the database.
+    Args:
+      name: the the name of the tournament.
+    """
+    conn = connect()
+    cur = conn.cursor()
+    query = "insert into tournaments(name) values(%s);"
+    cur.execute(query, (name, ))
+    conn.commit()
+    conn.close()
 
 
 def registerPlayer(name, tournament_id = 1):
@@ -74,43 +97,73 @@ def playerStandings(tournament_id = 1):
     """
     conn = connect()
     cur = conn.cursor()
-    query = "select * from standings;"
-    cur.execute(query)
+    query = """
+    select id, name, wins, matches
+    from standings
+    where tournament_id = %s;
+    """
+    cur.execute(query, (tournament_id,))
     data = cur.fetchall()
     conn.close()
     return data
 
-def new_match_id():
+def new_match_id(tournament_id = 1):
     """Generate a new match id for saving match results"""
     conn = connect()
     cur = conn.cursor()
-    query = "select coalesce(max(match_id), 0) + 1 as new_match_id from results;"
-    cur.execute(query)
+    query = """
+    select coalesce(max(match_id), 0) + 1 as new_match_id
+    from results
+    where tournament_id = %s;
+    """
+    cur.execute(query, (tournament_id,))
     data = cur.fetchone()
     conn.close()
     return data[0]
 
 
+def awardPoints(r_flag = 1):
+    """
+    Points are awarded as follows:
+      win: 2
+      draw: 1
+      loss: 0
+    """
+    if r_flag == 0:
+        return 1, 1
+    if r_flag == 1:
+        return 2, 0
+    if r_flag == 2:
+        return 0, 1
 
-def reportMatch(winner, loser, tournament_id = 1):
+def reportMatch(player1, player2, r_flag = 1, tournament_id = 1):
     """Records the outcome of a single match between two players.
 
     Args:
-      winner:  the id number of the player who won
-      loser:  the id number of the player who lost
+      player1:  the id number of one of the players in the match
+      player2:  the id number of the other player in the match
+      r_flag: result flag
+      tournament_id: id number of the current tournament
+
+    r_flag:
+        0: draw
+        1: player1 wins
+        2: player2 wins
+
     """
-    match = new_match_id()
+    points1, points2 = awardPoints(r_flag)
+    match = new_match_id(tournament_id)
     conn = connect()
     cur = conn.cursor()
     query = "insert into results(tournament_id, match_id, player_id, points) values(%s, %s, %s, %s);"
-    cur.execute(query, (tournament_id, match, winner, 2))
-    cur.execute(query, (tournament_id, match + 1, loser, 0))
+    cur.execute(query, (tournament_id, match, player1, points1))
+    cur.execute(query, (tournament_id, match + 1, player2, points2))
     conn.commit()
     conn.close()
 
 
 
-def swissPairings():
+def swissPairings(tournament_id = 1):
     """Returns a list of pairs of players for the next round of a match.
 
     Assuming that there are an even number of players registered, each player
@@ -127,8 +180,12 @@ def swissPairings():
     """
     conn = connect()
     cur = conn.cursor()
-    query = "select id, name from standings;"
-    cur.execute(query)
+    query = """
+    select id, name
+    from standings
+    where tournament_id = %s;
+    """
+    cur.execute(query, (tournament_id,))
     temp = cur.fetchall()
     conn.close()
     data = list()

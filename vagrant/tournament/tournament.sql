@@ -42,7 +42,8 @@ create table results(
 
 drop view if exists view_winners cascade;
 create view view_winners as
-    select results.player_id, coalesce(count(results.player_id), 0) as wins
+    select results.player_id, coalesce(count(results.player_id), 0) as wins,
+    sum(points) as points
     from results
     where results.points = 2
     group by results.player_id
@@ -58,7 +59,8 @@ create view view_losers as
 
 drop view if exists view_draws cascade;
 create view view_draws as
-    select results.player_id, coalesce(count(results.player_id), 0) as draws
+    select results.player_id, coalesce(count(results.player_id), 0) as draws,
+    sum(points) as points
     from results
     where results.points = 1
     group by results.player_id
@@ -67,8 +69,12 @@ create view view_draws as
 drop view if exists standings;
 create view standings as
     select players.id, players.name, coalesce(view_winners.wins, 0) as wins,
-    coalesce(view_winners.wins, 0) + coalesce(view_losers.losses, 0) as matches,
+    coalesce(view_winners.wins, 0) + coalesce(view_losers.losses, 0)
+    + coalesce(view_draws.draws, 0) as matches,
+    coalesce(view_winners.points, 0) + coalesce(view_draws.points, 0)
+    as total_points, 
     players.tournament_id
-    from (players left join view_winners on players.id = view_winners.player_id)
-    left join view_losers on players.id = view_losers.player_id
-    order by wins desc;
+    from ((players left join view_winners on players.id = view_winners.player_id)
+    left join view_losers on players.id = view_losers.player_id)
+    left join view_draws on players.id = view_draws.player_id
+    order by total_points desc;

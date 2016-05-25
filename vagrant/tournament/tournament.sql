@@ -69,10 +69,12 @@ create view view_draws as
 drop view if exists standings;
 create view standings as
     select players.id, players.name, coalesce(view_winners.wins, 0) as wins,
+    coalesce(view_draws.draws, 0) as draws,
+    coalesce(view_losers.losses, 0) as losses,
     coalesce(view_winners.wins, 0) + coalesce(view_losers.losses, 0)
     + coalesce(view_draws.draws, 0) as matches,
     coalesce(view_winners.points, 0) + coalesce(view_draws.points, 0)
-    as total_points, 
+    as total_points,
     players.tournament_id
     from ((players left join view_winners on players.id = view_winners.player_id)
     left join view_losers on players.id = view_losers.player_id)

@@ -134,7 +134,7 @@ def awardPoints(r_flag = 1):
     if r_flag == 1:
         return 2, 0
     if r_flag == 2:
-        return 0, 1
+        return 0, 2
 
 def reportMatch(player1, player2, r_flag = 1, tournament_id = 1):
     """Records the outcome of a single match between two players.

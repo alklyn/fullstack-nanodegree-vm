@@ -148,6 +148,7 @@ def testPairings():
 
 
 if __name__ == '__main__':
+    registerTournament('testing123')
     testCount()
     testStandingsBeforeMatches()
     testReportMatches()

@@ -23,54 +23,29 @@ create table players(
     name text not null
 );
 
-
-/*
-Points are awarded as follows
-win: 2
-loss: 0
-draw: 1
-*/
-create table results(
-    results_id serial primary key,
+create table matches(
+    match_id serial primary key,
     tournament_id integer references tournaments(tournament_id) on delete cascade,
-    match_id integer not null,
-    player_id integer references players(id) on delete cascade,
-    points integer not null
+    winner integer references players(id),
+    loser integer references players(id)
 );
 
 create view view_winners as
-    select results.player_id, coalesce(count(results.player_id), 0) as wins,
-    sum(points) as points
-    from results
-    where results.points = 2
-    group by results.player_id
-    order by wins desc;
+    select winner, count(winner) as won
+    from matches
+    group by winner
+    order by won desc;
 
 create view view_losers as
-    select results.player_id, coalesce(count(results.player_id), 0) as losses
-    from results
-    where results.points = 0
-    group by results.player_id
-    order by losses desc;
-
-create view view_draws as
-    select results.player_id, coalesce(count(results.player_id), 0) as draws,
-    sum(points) as points
-    from results
-    where results.points = 1
-    group by results.player_id
-    order by draws desc;
+    select loser, count(loser) as lost
+    from matches
+    group by loser
+    order by lost desc;
 
 create view standings as
-    select players.id, players.name, coalesce(view_winners.wins, 0) as wins,
-    coalesce(view_draws.draws, 0) as draws,
-    coalesce(view_losers.losses, 0) as losses,
-    coalesce(view_winners.wins, 0) + coalesce(view_losers.losses, 0)
-    + coalesce(view_draws.draws, 0) as matches,
-    coalesce(view_winners.points, 0) + coalesce(view_draws.points, 0)
-    as total_points,
+    select players.id, players.name, coalesce(view_winners.won,0) as wins,
+    coalesce(view_winners.won,0) + coalesce(view_losers.lost,0) as matches,
     players.tournament_id
-    from ((players left join view_winners on players.id = view_winners.player_id)
-    left join view_losers on players.id = view_losers.player_id)
-    left join view_draws on players.id = view_draws.player_id
-    order by total_points desc;
+    from (players left join view_winners on players.id = view_winners.winner)
+    left join view_losers on players.id = view_losers.loser
+    order by wins desc;

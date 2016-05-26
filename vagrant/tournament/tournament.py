@@ -33,7 +33,7 @@ def deleteTournaments():
 def deleteMatches():
     """Remove all the match records from the database."""
     conn, cur = connect()
-    query = "delete from results;"
+    query = "delete from matches;"
     cur.execute(query)
     conn.commit()
     conn.close()
@@ -70,7 +70,7 @@ def registerTournament(name):
     conn.close()
 
 
-def registerPlayer(name, tournament_id = 1):
+def registerPlayer(name, tournament_id=1):
     """Adds a player to the tournament database.
 
     The database assigns a unique serial id number for the player.  (This
@@ -86,7 +86,7 @@ def registerPlayer(name, tournament_id = 1):
     conn.close()
 
 
-def playerStandings(tournament_id = 1):
+def playerStandings(tournament_id=1):
     """Returns a list of the players and their win records, sorted by wins.
 
     The first entry in the list should be the player in first place, or a player
@@ -110,61 +110,24 @@ def playerStandings(tournament_id = 1):
     conn.close()
     return data
 
-def new_match_id(tournament_id = 1):
-    """Generate a new match id for saving match results"""
-    conn, cur = connect()
-    query = """
-    select coalesce(max(match_id), 0) + 1 as new_match_id
-    from results
-    where tournament_id = %s;
-    """
-    cur.execute(query, (tournament_id,))
-    data = cur.fetchone()
-    conn.close()
-    return data[0]
-
-
-def awardPoints(r_flag = 1):
-    """
-    Points are awarded as follows:
-      win: 2
-      draw: 1
-      loss: 0
-    """
-    if r_flag == 0:
-        return 1, 1
-    if r_flag == 1:
-        return 2, 0
-    if r_flag == 2:
-        return 0, 2
-
-def reportMatch(player1, player2, r_flag = 1, tournament_id = 1):
+def reportMatch(winner, loser, tournament_id=1):
     """Records the outcome of a single match between two players.
 
     Args:
-      player1:  the id number of one of the players in the match
-      player2:  the id number of the other player in the match
-      r_flag: result flag
+      winner:  the id number of the winner
+      loser:  the id number of the loser
       tournament_id: id number of the current tournament
 
-    r_flag:
-        0: draw
-        1: player1 wins
-        2: player2 wins
-
     """
-    points1, points2 = awardPoints(r_flag)
-    match = new_match_id(tournament_id)
     conn, cur = connect()
-    query = "insert into results(tournament_id, match_id, player_id, points) values(%s, %s, %s, %s);"
-    cur.execute(query, (tournament_id, match, player1, points1))
-    cur.execute(query, (tournament_id, match + 1, player2, points2))
+    query = "insert into matches(tournament_id, winner, loser) values(%s, %s, %s);"
+    cur.execute(query, (tournament_id, winner, loser))
     conn.commit()
     conn.close()
 
 
 
-def swissPairings(tournament_id = 1):
+def swissPairings(tournament_id=1):
     """Returns a list of pairs of players for the next round of a match.
 
     Assuming that there are an even number of players registered, each player

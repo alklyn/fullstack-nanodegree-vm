@@ -16,9 +16,7 @@ def connect(database_name="tournament"):
         return db, cursor
     except Exception as e:
         print(e)
-
-
-
+        exit()
 
 
 def deleteTournaments():
@@ -89,8 +87,8 @@ def registerPlayer(name, tournament_id=1):
 def playerStandings(tournament_id=1):
     """Returns a list of the players and their win records, sorted by wins.
 
-    The first entry in the list should be the player in first place, or a player
-    tied for first place if there is currently a tie.
+    The first entry in the list should be the player in first place, or a
+    player tied for first place if there is currently a tie.
 
     Returns:
       A list of tuples, each of which contains (id, name, wins, matches):
@@ -106,9 +104,10 @@ def playerStandings(tournament_id=1):
     where tournament_id = %s;
     """
     cur.execute(query, (tournament_id,))
-    data = cur.fetchall()
+    standings = cur.fetchall()
     conn.close()
-    return data
+    return standings
+
 
 def reportMatch(winner, loser, tournament_id=1):
     """Records the outcome of a single match between two players.
@@ -120,11 +119,12 @@ def reportMatch(winner, loser, tournament_id=1):
 
     """
     conn, cur = connect()
-    query = "insert into matches(tournament_id, winner, loser) values(%s, %s, %s);"
+    query = """
+    insert into matches(tournament_id, winner, loser) values(%s, %s, %s);
+    """
     cur.execute(query, (tournament_id, winner, loser))
     conn.commit()
     conn.close()
-
 
 
 def swissPairings(tournament_id=1):
@@ -142,16 +142,10 @@ def swissPairings(tournament_id=1):
         id2: the second player's unique id
         name2: the second player's name
     """
-    conn, cur = connect()
-    query = """
-    select id, name
-    from standings
-    where tournament_id = %s;
-    """
-    cur.execute(query, (tournament_id,))
-    temp = cur.fetchall()
-    conn.close()
-    data = list()
-    for index in range(0, len(temp), 2):
-        data.append(temp[index] + temp[index + 1])
-    return data
+    standings = playerStandings()
+    pairings = list()
+    for index in range(0, len(standings), 2):
+        pairings.append([
+            standings[index][0], standings[index][1],
+            standings[index + 1][0], standings[index + 1][1]])
+    return pairings

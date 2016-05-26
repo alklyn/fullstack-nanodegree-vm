@@ -12,20 +12,18 @@ create database tournament;
 
 \c tournament
 
-drop table if exists tournaments;
 create table tournaments(
     tournament_id serial primary key,
     name text not null
 );
 
-drop table if exists players;
 create table players(
     id serial primary key,
     tournament_id integer references tournaments(tournament_id) on delete cascade,
     name text not null
 );
 
-drop table if exists results;
+
 /*
 Points are awarded as follows
 win: 2
@@ -40,7 +38,6 @@ create table results(
     points integer not null
 );
 
-drop view if exists view_winners cascade;
 create view view_winners as
     select results.player_id, coalesce(count(results.player_id), 0) as wins,
     sum(points) as points
@@ -49,7 +46,6 @@ create view view_winners as
     group by results.player_id
     order by wins desc;
 
-drop view if exists view_losers cascade;
 create view view_losers as
     select results.player_id, coalesce(count(results.player_id), 0) as losses
     from results
@@ -57,7 +53,6 @@ create view view_losers as
     group by results.player_id
     order by losses desc;
 
-drop view if exists view_draws cascade;
 create view view_draws as
     select results.player_id, coalesce(count(results.player_id), 0) as draws,
     sum(points) as points
@@ -66,7 +61,6 @@ create view view_draws as
     group by results.player_id
     order by draws desc;
 
-drop view if exists standings;
 create view standings as
     select players.id, players.name, coalesce(view_winners.wins, 0) as wins,
     coalesce(view_draws.draws, 0) as draws,

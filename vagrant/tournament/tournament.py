@@ -28,29 +28,29 @@ def deleteTournaments():
     conn.close()
 
 
-def deleteMatches():
+def deleteMatches(tournament_id=1):
     """Remove all the match records from the database."""
     conn, cur = connect()
-    query = "delete from matches;"
-    cur.execute(query)
+    query = "delete from matches where tournament_id = %s;"
+    cur.execute(query, (tournament_id, ))
     conn.commit()
     conn.close()
 
 
-def deletePlayers():
+def deletePlayers(tournament_id=1):
     """Remove all the player records from the database."""
     conn, cur = connect()
-    query = "delete from players;"
-    cur.execute(query)
+    query = "delete from players where tournament_id = %s;"
+    cur.execute(query, (tournament_id, ))
     conn.commit()
     conn.close()
 
 
-def countPlayers():
+def countPlayers(tournament_id=1):
     """Returns the number of players currently registered."""
     conn, cur = connect()
-    query = "select count(*) from players;"
-    cur.execute(query)
+    query = "select count(*) from players where tournament_id = %s;"
+    cur.execute(query, (tournament_id, ))
     row = cur.fetchone()
     conn.close()
     return row[0]
@@ -142,7 +142,7 @@ def swissPairings(tournament_id=1):
         id2: the second player's unique id
         name2: the second player's name
     """
-    standings = playerStandings()
+    standings = playerStandings(tournament_id)
     pairings = list()
     for index in range(0, len(standings), 2):
         pairings.append([

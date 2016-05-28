@@ -1,5 +1,10 @@
 # Tournament project
 
+## What is it
+Python module that uses the PostgreSQL database to keep track of players and
+matches in a Swiss style game tournament.
+
+
 ## Project files
 File                | Purpose
 ------------------- | -------------------------------------------------------
@@ -11,7 +16,7 @@ tournament_test.py  | Contains unit tests for all the methods in the project
 ## Methods in tournament module
 Function        | Purpose
 --------------- | -------------------------------------------------------
-connect         | Meant to connect to the database.
+connect         | Connect to the database.
 deleteMatches   | Remove all the matches records from the database.
 deletePlayers   | Remove all the player records from the database.
 countPlayers    | Returns the number of players currently registered
@@ -89,7 +94,7 @@ swissPairings   | Returns a list of pairs of players for the next round of a
         * name2: the second player's name
 
 How to run the tournament project.
-* Install Vagrant and VirtualBox
+* Install Vagrant and Virtual Box
 * Launch the Vagrant VM
     1. Enter the vagrant folder: cd ../vagrant
     2. Start the vagrant box: vagrant up

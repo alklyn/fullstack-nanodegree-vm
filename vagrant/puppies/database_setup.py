@@ -17,21 +17,21 @@ class Shelter(Base):
     city = Column(String(250), nullable=False)
     state = Column(String(250), nullable=False)
     zip_code = Column(String(250), nullable=False)
-    website = Column(String(250))
+    website = Column(String(250), nullable=False)
     shelter_id = Column(Integer, primary_key=True)
 
 
 class Puppy(Base):
     __tablename__ = 'puppy' # Table information
     name = Column(String(250), nullable=False)
-    date_of_birth = Column(Date())
+    date_of_birth = Column(Date(), nullable=False)
     gender = Column(Boolean(), nullable=False)
-    weight = Column(Float())
-    picture = Column(String(250))
+    weight = Column(Float(), nullable=False)
+    picture = Column(String(250), nullable=False)
     shelter_id = Column(Integer, ForeignKey('shelter.shelter_id'))
     shelter = relationship(Shelter)
 
 
 
-engine = create_engine('sqlite:///restaurantmenu.db')
+engine = create_engine('sqlite:///puppies.db')
 Base.metadata.create_all(engine)

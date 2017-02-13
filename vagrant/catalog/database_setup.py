@@ -16,7 +16,7 @@ class Restaurant(Base):
     name = Column(String(250), nullable=False)
 
 
-class Menu(Base):
+class MenuItem(Base):
     __tablename__ = 'menu_item' # Table information
 
     # mapper

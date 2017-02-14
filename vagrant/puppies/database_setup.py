@@ -27,7 +27,7 @@ class Puppy(Base):
     puppy_id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
     date_of_birth = Column(Date(), nullable=False)
-    gender = Column(Boolean(), nullable=False)
+    gender = Column(String(6), nullable=False)
     weight = Column(Float(), nullable=False)
     picture = Column(String(250), nullable=False)
     shelter_id = Column(Integer, ForeignKey('shelter.shelter_id'))
@@ -35,5 +35,5 @@ class Puppy(Base):
 
 
 
-engine = create_engine('sqlite:///puppies.db')
+engine = create_engine('sqlite:///puppyshelter.db')
 Base.metadata.create_all(engine)

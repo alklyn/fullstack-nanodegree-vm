@@ -7,13 +7,14 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-restaurants = session.query(Restaurant).all()
+def get_restaurants():
+    """
+    Get a list of all the restaurants in the database.
+    """
+    results = session.query(Restaurant).order_by(Restaurant.name)
+    for item in results:
+        print("id:{:>2}, name:{:>40}".format(item.id, item.name))
+    return results
 
-for restaurant in restaurants:
-    print("id: {}, name: {}".format(restaurant.restaurant_id, restaurant.name))
 
-menu_items = session.query(MenuItem).all()
-
-for menu_item in menu_items:
-    print("restaurant_id: {}, id: {}, name: {}, description: {}, course: {}, price: {}"\
-    .format(menu_item.restaurant_id, menu_item.menu_id, menu_item.name, menu_item.description, menu_item.course, menu_item.price))
+get_restaurants()

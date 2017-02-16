@@ -1,6 +1,6 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import cgi
-from my_html import base, my_form, main_content
+from my_html import base, my_form, main_content, item_html
 from read_data import get_restaurants
 
 class WebserverHandler(BaseHTTPRequestHandler):
@@ -16,7 +16,7 @@ class WebserverHandler(BaseHTTPRequestHandler):
                 title = "Restaurants"
                 item_list = ""
                 for item in restaurants:
-                    item_list += "<li> {} </li>".format(item.name)
+                    item_list += item_html.format(item.name)
 
                 content = main_content.format(item_list)
                 output = base.format(content=content, title=title)

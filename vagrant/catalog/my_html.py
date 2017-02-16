@@ -15,16 +15,24 @@ base = """
 
 
 my_form = """
-<form method='POST' enctype='multipart/form-data' action='/hello'>
-    <h2> What would you like me to say?</h2>
-    <input name='message' type='text'>
-    <button> Submit </submit>
-</form>
+        <form method='POST' enctype='multipart/form-data' action='/hello'>
+            <h2> What would you like me to say?</h2>
+            <input name='message' type='text'>
+            <button> Submit </submit>
+        </form>
 """
 
 main_content = """
-<h2> Restaurants </h2>
-<ol>
-    {}
-</ol>
+        <h2> Restaurants </h2>
+        <ol>
+            {}
+        </ol>
+"""
+
+item_html = """
+            <p>
+                <li> {} </li> \n
+                <div><a href="">Edit</a></div>
+                <div><a href="">Delete</a></div>
+            </p>
 """

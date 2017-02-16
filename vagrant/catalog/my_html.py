@@ -24,6 +24,9 @@ my_form = """
 
 main_content = """
         <h2> Restaurants </h2>
+        <p>
+            <a href="#">Make A New Restaurant Here</a>
+        </p>
         <ol>
             {}
         </ol>
@@ -32,7 +35,7 @@ main_content = """
 item_html = """
             <p>
                 <li> {} </li> \n
-                <div><a href="">Edit</a></div>
-                <div><a href="">Delete</a></div>
+                <div><a href="#">Edit</a></div>
+                <div><a href="#">Delete</a></div>
             </p>
 """

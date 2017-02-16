@@ -1,7 +1,8 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import cgi
-from my_html import base, my_form, main_content, item_html
+from my_html import base, new_restaurant_form, main_content, item_html
 from read_data import get_restaurants
+from insert_data import add_restaurant
 
 class WebserverHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -25,13 +26,14 @@ class WebserverHandler(BaseHTTPRequestHandler):
                 print(output)
                 return
 
-            if self.path.endswith("/hola"):
+            elif self.path.endswith("/restaurants/new"):
                 self.send_response(200)
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
 
-                title = "Hello!"
-                content = hola_content
+
+                title = "Add new restaurant!"
+                content = new_restaurant_form
                 output = base.format(content=content, title=title)
                 self.wfile.write(output)
                 print(output)
@@ -48,16 +50,13 @@ class WebserverHandler(BaseHTTPRequestHandler):
             ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
             if ctype == 'multipart/form-data':
                 fields = cgi.parse_multipart(self.rfile, pdict)
-                messagecontent = fields.get('message')
+                name = fields.get('new_restaurant')[0]
 
-                content = post_content.format(messagecontent, my_form)
-                title = "POST stuff."
-                output = base.format(content=content, title=title)
-            self.wfile.write(output)
-            print(output)
+                add_restaurant(name)
+                print(name)
 
         except Exception as e:
-            raise
+            pass
 
 
 def main():

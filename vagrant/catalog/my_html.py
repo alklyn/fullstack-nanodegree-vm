@@ -13,19 +13,10 @@ base = """
 </html>
 """
 
-
-my_form = """
-        <form method='POST' enctype='multipart/form-data' action='/hello'>
-            <h2> What would you like me to say?</h2>
-            <input name='message' type='text'>
-            <button> Submit </submit>
-        </form>
-"""
-
 main_content = """
         <h2> Restaurants </h2>
         <p>
-            <a href="#">Make A New Restaurant Here</a>
+            <a href="/restaurants/new">Make A New Restaurant Here</a>
         </p>
         <ol>
             {}
@@ -38,4 +29,12 @@ item_html = """
                 <div><a href="#">Edit</a></div>
                 <div><a href="#">Delete</a></div>
             </p>
+"""
+
+new_restaurant_form = """
+        <h1> Make A New Restaurant </h1>
+        <form method='POST' enctype='multipart/form-data' action='/restaurants'>
+            <input name='new_restaurant' type='text'>
+            <button> Submit </submit>
+        </form>
 """

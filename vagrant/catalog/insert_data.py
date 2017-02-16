@@ -7,6 +7,12 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-my_first_restaurant = Restaurant(name='Pizza Palace')
-session.add(my_first_restaurant)
-session.commit()
+
+def add_restaurant(name):
+    """
+    Add a new restaurant to the database
+    """
+    new_restaurant = Restaurant(name=name)
+    session.add(new_restaurant)
+    session.commit()
+    print("Restaurant added to database.")

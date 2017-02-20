@@ -45,8 +45,6 @@ class WebserverHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         try:
             if self.path.endswith("/restaurants/add_new"):
-                self.send_response(301)
-                self.end_headers()
 
                 ctype, pdict = cgi.parse_header(
                     self.headers.getheader('content-type'))
@@ -57,10 +55,10 @@ class WebserverHandler(BaseHTTPRequestHandler):
                     add_restaurant(name)
                     print(name)
 
-                title = "New Restaurant Added"
-                content = add_new_content
-                output = base.format(content=content, title=title, my_js=my_js)
-                self.wfile.write(output)
+                self.send_response(301)
+                self.send_header('Content-type', 'text/html')
+                self.send_header('Location', '/restaurants') # redirect
+                self.end_headers()
 
         except Exception as e:
             self.send_error(404, "File Not Found {}".format(self.path))

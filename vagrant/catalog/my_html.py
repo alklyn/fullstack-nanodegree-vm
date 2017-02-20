@@ -7,7 +7,7 @@ base = """
         <title>
             {title}
         </title>
-        
+
         {my_js}
     </head>
 
@@ -29,17 +29,26 @@ main_content = """
 
 item_html = """
             <p>
-                <li> {} </li> \n
-                <div><a href="#">Edit</a></div>
+                <li> {restaurant_name} </li> \n
+                <div><a href="/restaurants/{restaurant_id}/edit">Edit</a></div>
                 <div><a href="#">Delete</a></div>
             </p>
 """
 
 new_restaurant_form = """
         <h1> Make A New Restaurant </h1>
-        <form method='POST' enctype='multipart/form-data' action='/restaurants/add_new'>
-            <input name='new_restaurant' type='text'>
+        <form method="POST" enctype="multipart/form-data" action="/restaurants/add_new">
+            <input name="new_restaurant" type="text">
             <button> Submit </submit>
+        </form>
+"""
+
+edit_restaurant_form = """
+        <h1> Edit Restaurant </h1>
+        <form method="POST" enctype="multipart/form-data" action="/restaurants/edit_restaurant">
+            <input name="new_name" type="text" value="{old_name}">
+            <input name="restaurant_id" type="hidden" value="{restaurant_id}">
+            <button> Edit Restaurant </submit>
         </form>
 """
 

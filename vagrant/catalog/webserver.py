@@ -1,6 +1,7 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import cgi
 from my_html import base, new_restaurant_form, main_content, item_html
+from my_html import add_new_content, my_js
 from read_data import get_restaurants
 from insert_data import add_restaurant
 
@@ -20,7 +21,7 @@ class WebserverHandler(BaseHTTPRequestHandler):
                     item_list += item_html.format(item.name)
 
                 content = main_content.format(item_list)
-                output = base.format(content=content, title=title)
+                output = base.format(content=content, title=title, my_js="")
 
                 self.wfile.write(output)
                 print(output)
@@ -31,10 +32,9 @@ class WebserverHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
 
-
                 title = "Add new restaurant!"
                 content = new_restaurant_form
-                output = base.format(content=content, title=title)
+                output = base.format(content=content, title=title, my_js="")
                 self.wfile.write(output)
                 print(output)
                 return
@@ -44,19 +44,26 @@ class WebserverHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         try:
-            self.send_response(301)
-            self.end_headers()
+            if self.path.endswith("/restaurants/add_new"):
+                self.send_response(301)
+                self.end_headers()
 
-            ctype, pdict = cgi.parse_header(self.headers.getheader('content-type'))
-            if ctype == 'multipart/form-data':
-                fields = cgi.parse_multipart(self.rfile, pdict)
-                name = fields.get('new_restaurant')[0]
+                ctype, pdict = cgi.parse_header(
+                    self.headers.getheader('content-type'))
+                if ctype == 'multipart/form-data':
+                    fields = cgi.parse_multipart(self.rfile, pdict)
+                    name = fields.get('new_restaurant')[0]
 
-                add_restaurant(name)
-                print(name)
+                    add_restaurant(name)
+                    print(name)
+
+                title = "New Restaurant Added"
+                content = add_new_content
+                output = base.format(content=content, title=title, my_js=my_js)
+                self.wfile.write(output)
 
         except Exception as e:
-            pass
+            self.send_error(404, "File Not Found {}".format(self.path))
 
 
 def main():

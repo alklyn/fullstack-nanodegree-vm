@@ -4,7 +4,11 @@
 base = """
 <html>
     <head>
-        <title>{title}</title>
+        <title>
+            {title}
+        </title>
+        
+        {my_js}
     </head>
 
     <body>
@@ -33,8 +37,22 @@ item_html = """
 
 new_restaurant_form = """
         <h1> Make A New Restaurant </h1>
-        <form method='POST' enctype='multipart/form-data' action='/restaurants'>
+        <form method='POST' enctype='multipart/form-data' action='/restaurants/add_new'>
             <input name='new_restaurant' type='text'>
             <button> Submit </submit>
         </form>
+"""
+
+my_js = """
+            <script>
+                function redirect(post_id){
+                   window.location.href = "/blog/" + post_id;
+                }
+            </script>
+"""
+
+add_new_content = """
+            <script>
+                setTimeout(function() { redirect("/restaurants"); }, 50);
+            </script>
 """

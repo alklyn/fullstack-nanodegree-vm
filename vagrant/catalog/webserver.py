@@ -5,8 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
 from insert_data import add_restaurant
 from my_html import base, new_restaurant_form, main_content, item_html
-from my_html import edit_restaurant_form
-from my_html import add_new_content, my_js
+from my_html import edit_restaurant_form, delete_restaurant_form
 
 engine = create_engine('sqlite:///restaurantmenu.db')
 Base.metadata.bind = engine
@@ -31,7 +30,7 @@ class WebserverHandler(BaseHTTPRequestHandler):
                         restaurant_name=item.name, restaurant_id=item.id)
 
                 content = main_content.format(item_list)
-                output = base.format(content=content, title=title, my_js="")
+                output = base.format(content=content, title=title)
 
                 self.wfile.write(output)
                 # print(output)
@@ -44,12 +43,12 @@ class WebserverHandler(BaseHTTPRequestHandler):
 
                 title = "Add new restaurant!"
                 content = new_restaurant_form
-                output = base.format(content=content, title=title, my_js="")
+                output = base.format(content=content, title=title)
                 self.wfile.write(output)
                 # print(output)
                 return
 
-            elif self.path.endswith("edit"):
+            elif self.path.endswith("/edit"):
                 self.send_response(200)
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
@@ -68,7 +67,31 @@ class WebserverHandler(BaseHTTPRequestHandler):
                             old_name=restaurant.name,
                             restaurant_id=restaurant.id)
                         output = base.format(
-                            content=content, title=title, my_js="")
+                            content=content, title=title)
+                        self.wfile.write(output)
+                        # print(output)
+                        return
+
+            elif self.path.endswith("/delete"):
+                self.send_response(200)
+                self.send_header('Content-type', 'text/html')
+                self.end_headers()
+
+                restaurant_id = str(self.path).split("/")[-2]
+                print(restaurant_id)
+
+                if restaurant_id.isdigit():
+                    restaurant_id = int(restaurant_id)
+                    restaurant = \
+                        session.query(Restaurant).filter(
+                            Restaurant.id == restaurant_id).first()
+                    if restaurant:
+                        title = "Delete Restaurant!"
+                        content = delete_restaurant_form.format(
+                            restaurant_name=restaurant.name,
+                            restaurant_id=restaurant.id)
+                        output = base.format(
+                            content=content, title=title)
                         self.wfile.write(output)
                         # print(output)
                         return
@@ -125,7 +148,33 @@ class WebserverHandler(BaseHTTPRequestHandler):
                         self.end_headers()
                         return
 
-            self.send_error(500, "Something went wrong.")
+            elif self.path.endswith("/restaurants/delete_restaurant"):
+
+                ctype, pdict = cgi.parse_header(
+                    self.headers.getheader('content-type'))
+                if ctype == 'multipart/form-data':
+                    fields = cgi.parse_multipart(self.rfile, pdict)
+                    restaurant_id = fields.get('restaurant_id')[0]
+                    print("Deleting restaurant: {}".format(restaurant_id))
+
+                if restaurant_id.isdigit():
+                    restaurant_id = int(restaurant_id)
+                    restaurant = \
+                        session.query(Restaurant).filter(
+                            Restaurant.id == restaurant_id).first()
+
+                    if restaurant:
+                        print("Deleting restaurant: {}".format(restaurant.name))
+                        session.delete(restaurant)
+                        session.commit()
+
+                        self.send_response(301)
+                        self.send_header('Content-type', 'text/html')
+                        self.send_header('Location', '/restaurants') # redirect
+                        self.end_headers()
+                        return
+
+            self.send_error(500, "Something went terribly wrong.")
 
         except Exception as e:
             self.send_error(404, "File Not Found {}".format(self.path))

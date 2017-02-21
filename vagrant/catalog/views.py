@@ -12,12 +12,17 @@ session = DBSession()
 app = Flask(__name__) # Create an instance of the Flask class
 
 @app.route("/")
-@app.route("/menu_items")
-def Menu():
+@app.route("/restaurants/<int:restaurant_id>/")
+def Menu(restaurant_id=-1):
     """
     Display menu
     """
-    restaurant = session.query(Restaurant).first() # Get the first restaurant
+    if restaurant_id == -1:
+        restaurant = session.query(Restaurant).first()
+    else:
+        restaurant = \
+            session.query(Restaurant).filter_by(id=restaurant_id).first()
+
     menu = session.query(MenuItem).filter_by(restaurant_id=restaurant.id)
 
     menu_list =""
@@ -30,7 +35,7 @@ def Menu():
     content = menu_content.format(
         restaurant_name=restaurant.name,
         menu_list=menu_list)
-        
+
     output = base.format(title=restaurant.name, content=content)
     return output
 

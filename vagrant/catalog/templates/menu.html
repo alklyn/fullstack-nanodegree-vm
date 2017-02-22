@@ -6,7 +6,7 @@
 
 {% block content %}
         <div class="row">
-            <div class="col-md-4 col-md-offset-4 blog-post">
+            <div class="col-md-4 col-md-offset-4 menu">
                 <h1> {{ restaurant.name }} </h1>
                 <h2> Menu Items </h2>
                 <ol>
@@ -15,6 +15,16 @@
                         <div>{{ menu_item.name }}</div>
                         <div>{{ menu_item.price }}</div>
                         <div>{{ menu_item.description }}</div>
+                        <div>
+                            <a href="{{ url_for('edit_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
+                                Edit
+                            </a>
+                        </div>
+                        <div>
+                            <a href="{{ url_for('delete_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
+                                Delete
+                            </a>
+                        </div>
                     </li>
                     <hr>
                 {% endfor %}

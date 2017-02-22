@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
@@ -13,7 +13,7 @@ app = Flask(__name__) # Create an instance of the Flask class
 
 @app.route("/")
 @app.route("/restaurants/<int:restaurant_id>/")
-def Menu(restaurant_id=-1):
+def menu(restaurant_id=-1):
     """
     Display menu
     """
@@ -24,7 +24,10 @@ def Menu(restaurant_id=-1):
             session.query(Restaurant).filter_by(id=restaurant_id).first()
 
     menu = session.query(MenuItem).filter_by(restaurant_id=restaurant.id)
-    return render_template("menu.html", restaurant=restaurant, menu=menu)
+    return render_template(
+        "menu.html",
+        restaurant=restaurant,
+        menu=menu)
 
 # Task 1: Create route for newMenuItem function here
 @app.route('/restaurants/new_menu_item/<int:restaurant_id>/')

@@ -38,15 +38,16 @@ def menu(restaurant_id=-1):
     methods=["GET", "POST"])
 def new_menu_item(restaurant_id):
     if request.method == "POST":
-        new_item = MenuItem(
-            name=request.form["name"],
-            description=request.form["description"],
-            price="$" + request.form["price"],
-            course=request.form["course"],
-            restaurant_id=restaurant_id)
+        if request.form["choice"] == "create":
+            new_item = MenuItem(
+                name=request.form["name"],
+                description=request.form["description"],
+                price="$" + request.form["price"],
+                course=request.form["course"],
+                restaurant_id=restaurant_id)
 
-        session.add(new_item)
-        session.commit()
+            session.add(new_item)
+            session.commit()
         # Display the newly created menu item
         return redirect(url_for('menu', restaurant_id=restaurant_id))
 

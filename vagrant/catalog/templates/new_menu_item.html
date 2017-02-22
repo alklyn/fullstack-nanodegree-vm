@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Add New Menu Item
+{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <link type="text/css" rel="stylesheet" href="../static/styles/forms.css">
+{% endblock %}
+
+{% block content %}
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 menu">
+                <h1> {{ restaurant.name }} </h1>
+                <form method="POST" action="{{ url_for('new_menu_item', restaurant_id=restaurant.id) }}">
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" size="30" name="name">
+                        </div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" size="30" name="description">
+                        </div>
+                        <div class="col-sm-10">
+                            <span class="input-group-addon">$</span>
+                            <input type="text" class="form-control" size="30" name="price">
+                        </div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" size="30" name="course">
+                        </div>
+                        <div class="col-sm-10">
+                            <button class="btn btn-default" name="choice"> Create </button>
+                            <button class="btn btn-default" name="choice"> Cancel </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+{% endblock %}

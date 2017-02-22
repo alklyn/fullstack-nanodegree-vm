@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
@@ -24,20 +24,22 @@ def Menu(restaurant_id=-1):
             session.query(Restaurant).filter_by(id=restaurant_id).first()
 
     menu = session.query(MenuItem).filter_by(restaurant_id=restaurant.id)
+    return render_template("menu.html", restaurant=restaurant, menu=menu)
 
-    menu_list =""
-    for item in menu:
-        menu_list += menu_item.format(
-            name=item.name,
-            price=item.price,
-            description=item.description)
+# Task 1: Create route for newMenuItem function here
+@app.route('/restaurants/new_menu_item/<int:restaurant_id>/')
+def new_menu_item(restaurant_id):
+    return "page to create a new menu item. Task 1 complete!"
 
-    content = menu_content.format(
-        restaurant_name=restaurant.name,
-        menu_list=menu_list)
+# Task 2: Create route for editMenuItem function here
+@app.route('/restaurants/edit_menu_item/<int:restaurant_id>/<int:menu_id>/')
+def edit_menu_item(restaurant_id, menu_id):
+    return "page to edit a menu item. Task 2 complete!"
 
-    output = base.format(title=restaurant.name, content=content)
-    return output
+# Task 3: Create a route for deleteMenuItem function here
+@app.route('/restaurants/delete_menu_item/<int:restaurant_id>/<int:menu_id>/')
+def delete_menu_item(restaurant_id, menu_id):
+    return "page to delete a menu item. Task 3 complete!"
 
 if __name__ == "__main__":
     app.debug = True

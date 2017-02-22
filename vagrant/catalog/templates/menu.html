@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Menu
+{% endblock %}
+
+{% block content %}
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4 blog-post">
+                <h1> {{ restaurant.name }} </h1>
+                <h2> Menu Items </h2>
+                <ol>
+                {% for menu_item in menu%}
+                    <li>
+                        <div>{{ menu_item.name }}</div>
+                        <div>{{ menu_item.price }}</div>
+                        <div>{{ menu_item.description }}</div>
+                    </li>
+                    <hr>
+                {% endfor %}
+                </ol>
+            </div>
+        </div>
+{% endblock %}

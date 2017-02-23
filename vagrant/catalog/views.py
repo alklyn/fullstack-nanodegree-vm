@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
@@ -125,5 +125,6 @@ def delete_menu_item(restaurant_id, menu_id):
             menu_item=menu_item)
 
 if __name__ == "__main__":
+    app.secret_key = "Ut0ndr1agr14*$hitmh@7ayAk0*"
     app.debug = True
     app.run(debug=True, host="0.0.0.0", port=8080)

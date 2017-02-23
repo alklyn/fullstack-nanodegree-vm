@@ -1,4 +1,13 @@
 /* Comming soon */
-.menu {
-    max-width: 80vw;
+.menu-header {
+    display: flex;
+}
+
+.custom-glyph {
+    margin-top: 4vh;
+    margin-left: 2vw;
+}
+
+button + button {
+    margin-left: 2vw;
 }

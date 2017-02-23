@@ -58,6 +58,7 @@ def new_menu_item(restaurant_id):
 
             session.add(new_item)
             session.commit()
+            flash("New menu item created.")
         # Display the newly created menu item
         return redirect(url_for('menu', restaurant_id=restaurant_id))
 
@@ -84,6 +85,7 @@ def edit_menu_item(restaurant_id, menu_id):
 
             session.add(menu_item)
             session.commit()
+            flash("Menu item edited.")
         # Display the newly edited menu item
         return redirect(url_for('menu', restaurant_id=restaurant_id))
 
@@ -110,6 +112,7 @@ def delete_menu_item(restaurant_id, menu_id):
 
             session.delete(menu_item)
             session.commit()
+            flash("Menu item deleted.")
         # Display list of menu items
         return redirect(url_for('menu', restaurant_id=restaurant_id))
 

@@ -1,4 +1,3 @@
-/* Comming soon */
-.inputs {
-    display: block;
+.input-group + .input-group {
+    margin-top: 1vh;
 }

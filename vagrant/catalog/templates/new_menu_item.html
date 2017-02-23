@@ -6,11 +6,11 @@
 
 {% block styles %}
     {{ super() }}
-    <link type="text/css" rel="stylesheet" href="../static/styles/forms.css">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/forms.css') }}">
 {% endblock %}
 
 {% block content %}
-        <div class="row">
+        <div class="row panel">
             <div class="col-md-8 col-md-offset-2 menu">
                 <h1> {{ restaurant.name }} </h1>
                 <form method="POST" action="{{ url_for('new_menu_item', restaurant_id=restaurant.id) }}">

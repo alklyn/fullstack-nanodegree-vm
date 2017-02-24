@@ -3,7 +3,6 @@ from flask import jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
-from my_html import base, menu_content, menu_item
 
 engine = create_engine("sqlite:///restaurantmenu.db")
 Base.metadata.bind = engine
@@ -45,20 +44,37 @@ def restaurants():
     return render_template("restaurants.html", restaurants=restaurants)
 
 
+@app.route("/restaurants/new_restaurant/")
+def new_restaurant():
+    """
+    Add a new restaurant.
+    """
+    return "This page will add new restaurants."
+
+
+@app.route("/restaurants/edit_restaurant/<int:restaurant_id>/")
+def edit_restaurant(restaurant_id):
+    """
+    Edit restaurant details.
+    """
+    return "This page will edit a restaurant."
+
+
+@app.route("/restaurants/delete_restaurant/<int:restaurant_id>/")
+def delete_restaurant(restaurant_id):
+    """
+    Delete restaurant.
+    """
+    return "This page will delete a restaurant."
+
+
 @app.route("/restaurants/<int:restaurant_id>/")
+@app.route("/restaurants/<int:restaurant_id>/menu")
 def menu(restaurant_id=-1):
     """
-    Display menu
+    Display menu for the selected restaurant.
     """
-    if restaurant_id == -1:
-        restaurant = \
-            session.query(Restaurant).order_by(Restaurant.id.desc()).first()
-    elif restaurant_id == 0:
-        restaurant = session.query(Restaurant).first()
-    else:
-        restaurant = \
-            session.query(Restaurant).filter_by(id=restaurant_id).first()
-
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).first()
     menu = session.query(MenuItem).filter_by(restaurant_id=restaurant.id)
     return render_template(
         "menu.html",
@@ -66,7 +82,6 @@ def menu(restaurant_id=-1):
         menu=menu)
 
 
-# Task 1: Create route for newMenuItem function here
 @app.route(
     "/restaurants/new_menu_item/<int:restaurant_id>/",
     methods=["GET", "POST"])
@@ -76,14 +91,13 @@ def new_menu_item(restaurant_id):
             new_item = MenuItem(
                 name=request.form["name"],
                 description=request.form["description"],
-                price="$" + request.form["price"],
+                price=request.form["price"],
                 course=request.form["course"],
                 restaurant_id=restaurant_id)
 
             session.add(new_item)
             session.commit()
             flash("New menu item created.")
-        # Display the newly created menu item
         return redirect(url_for('menu', restaurant_id=restaurant_id))
 
     else:
@@ -92,7 +106,6 @@ def new_menu_item(restaurant_id):
         return render_template("new_menu_item.html", restaurant=restaurant)
 
 
-# Task 2: Create route for editMenuItem function here
 @app.route(
     "/restaurants/edit_menu_item/<int:restaurant_id>/<int:menu_id>/",
     methods=["GET", "POST"])

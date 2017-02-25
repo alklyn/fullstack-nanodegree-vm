@@ -1,3 +1,9 @@
 .input-group + .input-group {
     margin-top: 1vh;
 }
+
+
+.create-new {
+    border-bottom: 0.2vh solid #337ab7;
+    margin-bottom: 3vh;
+}

@@ -3,6 +3,7 @@ from flask import jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
+import fake_db 
 
 engine = create_engine("sqlite:///restaurantmenu.db")
 Base.metadata.bind = engine
@@ -40,8 +41,7 @@ def restaurants():
     """
     Display restaurants
     """
-    restaurants = session.query(Restaurant).order_by(Restaurant.id)
-    return render_template("restaurants.html", restaurants=restaurants)
+    return render_template("restaurants.html", restaurants=fake_db.restaurants)
 
 
 @app.route("/restaurants/new_restaurant/")

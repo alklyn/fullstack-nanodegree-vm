@@ -7,3 +7,20 @@
     border-bottom: 0.2vh solid #337ab7;
     margin-bottom: 3vh;
 }
+
+label {
+    display: flex;
+    margin-bottom: 2vh;
+}
+
+.panel-heading {
+    margin-bottom: 3vh;
+}
+
+.label-name + input {
+    margin-left: 2vw;
+}
+
+label, .btn {
+    margin-left: 2vw;
+}

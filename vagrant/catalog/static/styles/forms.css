@@ -8,9 +8,12 @@
     margin-bottom: 3vh;
 }
 
+.main-panel{
+    margin-top: 5vh;
+}
+
 label {
     display: flex;
-    margin-bottom: 2vh;
 }
 
 .panel-heading {
@@ -23,4 +26,5 @@ label {
 
 label, .btn {
     margin-left: 2vw;
+    margin-bottom: 2vh;
 }

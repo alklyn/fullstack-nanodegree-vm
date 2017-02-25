@@ -3,7 +3,7 @@ from flask import jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
-import fake_db 
+import fake_db
 
 engine = create_engine("sqlite:///restaurantmenu.db")
 Base.metadata.bind = engine
@@ -57,7 +57,7 @@ def edit_restaurant(restaurant_id):
     """
     Edit restaurant details.
     """
-    return "This page will edit restaurant {}.".format(restaurant_id)
+    return render_template("edit_restaurant.html", restaurant=fake_db.restaurant)
 
 
 @app.route("/restaurants/delete_restaurant/<int:restaurant_id>/")

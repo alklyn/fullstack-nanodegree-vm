@@ -179,7 +179,7 @@ def edit_menu_item(restaurant_id, menu_id):
             session.commit()
             flash("Menu item edited.")
         # Display the newly edited menu item
-        return redirect(url_for('menu', restaurant_id=restaurant_id))
+        return redirect(url_for('show_menu', restaurant_id=restaurant_id))
 
     else:
         restaurant = \

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Edit Restaurant
+{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/forms.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <div class="panel panel-primary main-panel">
+            <div class="panel-heading">
+                {% block panel_heading %}
+                <h3>Edit restaurant <br> - "{{ restaurant.name }}"</h3>
+                {% endblock %}
+            </div>
+            {% block form %}
+            <form method="POST" action="{{ url_for('edit_restaurant', restaurant_id=restaurant.id) }}">
+                <label>
+                    <div class="label-name">Name</div>
+                    <input type="text" name="name" value="{{ restaurant.name }}">
+                </label>
+                <button class="btn btn-default" name="choice" value="create"> Edit </button>
+                <button class="btn btn-default" name="choice" value="cancel"> Cancel </button>
+            </form>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

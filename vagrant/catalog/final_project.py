@@ -64,7 +64,6 @@ def new_restaurant():
             session.commit()
 
             flash("New restaurant created.")
-        # Display the newly created menu item
         return redirect(url_for('restaurants'))
 
     else:
@@ -78,8 +77,21 @@ def edit_restaurant(restaurant_id):
     """
     Edit restaurant details.
     """
-    restaurant = fake_db.restaurant
-    return render_template("edit_restaurant.html", restaurant=restaurant)
+    if request.method == "POST":
+        if request.form["choice"] == "edit":
+            restaurant = \
+                session.query(Restaurant).filter_by(id=restaurant_id).one()
+            restaurant.name = request.form["name"]
+            session.add(restaurant)
+            session.commit()
+
+            flash("Restaurant edited.")
+        return redirect(url_for('restaurants'))
+
+    else:
+        restaurant = \
+            session.query(Restaurant).filter_by(id=restaurant_id).one()
+        return render_template("edit_restaurant.html", restaurant=restaurant)
 
 
 @app.route(

@@ -7,6 +7,10 @@ input, textarea {
     width: 100vw;
 }
 
+textarea {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
 
 .create-new {
     border-bottom: 0.2vh solid #337ab7;

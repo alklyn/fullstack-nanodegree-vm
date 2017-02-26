@@ -147,7 +147,7 @@ def new_menu_item(restaurant_id):
             session.commit()
             flash("New menu item created.")
         # Display the newly created menu item
-        return redirect(url_for('menu', restaurant_id=restaurant_id))
+        return redirect(url_for('show_menu', restaurant_id=restaurant_id))
 
     else:
         restaurant = \

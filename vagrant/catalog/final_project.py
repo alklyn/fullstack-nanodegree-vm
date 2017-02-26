@@ -52,15 +52,28 @@ def restaurants():
     return render_template("restaurants.html", restaurants=restaurants)
 
 
-@app.route("/restaurants/new_restaurant/")
+@app.route("/restaurants/new_restaurant/", methods=["GET", "POST"])
 def new_restaurant():
     """
     Add a new restaurant.
     """
-    return render_template("new_restaurant.html")
+    if request.method == "POST":
+        if request.form["choice"] == "create":
+            restaurant = Restaurant(name=request.form["name"])
+            session.add(restaurant)
+            session.commit()
+
+            flash("New restaurant created.")
+        # Display the newly created menu item
+        return redirect(url_for('restaurants'))
+
+    else:
+        return render_template("new_restaurant.html")
 
 
-@app.route("/restaurants/edit_restaurant/<int:restaurant_id>/")
+@app.route(
+    "/restaurants/edit_restaurant/<int:restaurant_id>/",
+    methods=["GET", "POST"])
 def edit_restaurant(restaurant_id):
     """
     Edit restaurant details.
@@ -69,7 +82,9 @@ def edit_restaurant(restaurant_id):
     return render_template("edit_restaurant.html", restaurant=restaurant)
 
 
-@app.route("/restaurants/delete_restaurant/<int:restaurant_id>/")
+@app.route(
+    "/restaurants/delete_restaurant/<int:restaurant_id>/",
+    methods=["GET", "POST"])
 def delete_restaurant(restaurant_id):
     """
     Delete restaurant.

@@ -1,8 +1,12 @@
 {% extends "base_list_page.html" %}
 
 
+{% block title %}
+    {{ restaurant.name }} - Menu
+{% endblock %}
+
 {% block heading %}
-    <h1> {{ restaurant.name }} - Menu</h1>
+    {{ restaurant.name }} - Menu
 {% endblock %}
 
 {% block create_new %}

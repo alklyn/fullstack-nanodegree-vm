@@ -1,4 +1,11 @@
-/* Comming soon */
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 .menu-header {
     display: flex;
 }

@@ -1,5 +1,7 @@
-.input-group + .input-group {
-    margin-top: 1vh;
+input, textarea {
+    width: 100vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 
 

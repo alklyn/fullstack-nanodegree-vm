@@ -88,8 +88,25 @@ def new_menu_item(restaurant_id):
     """
     Create a new menu item for the selected restaurant.
     """
-    return "This page will create a new menu item for restaurant {}.".\
-        format(restaurant_id)
+    if request.method == "POST":
+        if request.form["choice"] == "create":
+            new_item = MenuItem(
+                name=request.form["name"],
+                description=request.form["description"],
+                price=request.form["price"],
+                course=request.form["course"],
+                restaurant_id=restaurant_id)
+
+            session.add(new_item)
+            session.commit()
+            flash("New menu item created.")
+        # Display the newly created menu item
+        return redirect(url_for('menu', restaurant_id=restaurant_id))
+
+    else:
+        restaurant = \
+            session.query(Restaurant).filter_by(id=restaurant_id).first()
+        return render_template("new_menu_item.html", restaurant=restaurant)
 
 
 @app.route(

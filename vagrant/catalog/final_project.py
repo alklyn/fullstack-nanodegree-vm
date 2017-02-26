@@ -57,7 +57,8 @@ def edit_restaurant(restaurant_id):
     """
     Edit restaurant details.
     """
-    return render_template("edit_restaurant.html", restaurant=fake_db.restaurant)
+    restaurant = fake_db.restaurant
+    return render_template("edit_restaurant.html", restaurant=restaurant)
 
 
 @app.route("/restaurants/delete_restaurant/<int:restaurant_id>/")
@@ -65,7 +66,8 @@ def delete_restaurant(restaurant_id):
     """
     Delete restaurant.
     """
-    return "This page will delete restaurant {}.".format(restaurant_id)
+    restaurant = fake_db.restaurant
+    return render_template("delete_restaurant.html", restaurant=restaurant)
 
 
 @app.route("/restaurants/<int:restaurant_id>/")

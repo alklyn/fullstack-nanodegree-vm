@@ -41,7 +41,8 @@ def restaurants():
     """
     Display restaurants
     """
-    return render_template("restaurants.html", restaurants=fake_db.restaurants)
+    restaurants = session.query(Restaurant).order_by(Restaurant.id).all()
+    return render_template("restaurants.html", restaurants=restaurants)
 
 
 @app.route("/restaurants/new_restaurant/")
@@ -71,18 +72,18 @@ def delete_restaurant(restaurant_id):
 
 
 @app.route("/restaurants/<int:restaurant_id>/")
-@app.route("/restaurants/<int:restaurant_id>/menu")
-def menu(restaurant_id=-1):
+@app.route("/restaurants/<int:restaurant_id>/show_menu")
+def show_menu(restaurant_id=-1):
     """
     Display menu for the selected restaurant.
     """
-    return "This page will display the menu for restaurant {}.".\
-        format(restaurant_id)
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    menu = session.query(MenuItem).filter_by(restaurant_id=restaurant.id)
+    return render_template("menu.html", restaurant=restaurant, menu=menu)
 
 
 @app.route(
-    "/restaurants/new_menu_item/<int:restaurant_id>/",
-    methods=["GET", "POST"])
+    "/restaurants/new_menu_item/<int:restaurant_id>/", methods=["GET", "POST"])
 def new_menu_item(restaurant_id):
     """
     Create a new menu item for the selected restaurant.
@@ -100,7 +101,7 @@ def edit_menu_item(restaurant_id, menu_id):
     """
     return "This page will edit item {}.".format(menu_id)
 
-app.route(
+@app.route(
     "/restaurants/delete_menu_item/<int:restaurant_id>/<int:menu_id>/",
     methods=["GET", "POST"])
 def delete_menu_item(restaurant_id, menu_id):

@@ -210,7 +210,7 @@ def delete_menu_item(restaurant_id, menu_id):
             session.commit()
             flash("Menu item deleted.")
         # Display list of menu items
-        return redirect(url_for('menu', restaurant_id=restaurant_id))
+        return redirect(url_for('show_menu', restaurant_id=restaurant_id))
 
     else:
         restaurant = \

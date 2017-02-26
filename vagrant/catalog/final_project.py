@@ -19,7 +19,15 @@ courses = [
     "Beverage"
 ]
 
-# Making an API Endpoint (GET Request)
+@app.route("/restaurants/JSON")
+def restaurants_json():
+    """
+    JSON API Endpoint
+    """
+    restaurants = session.query(Restaurant).all()
+    return jsonify(menu=[restaurant.serialize for restaurant in restaurants])
+
+
 @app.route("/restaurants/<int:restaurant_id>/menu/JSON")
 def restaurant_menu_json(restaurant_id):
     """
@@ -31,7 +39,6 @@ def restaurant_menu_json(restaurant_id):
     return jsonify(menu=[item.serialize for item in menu_items])
 
 
-# Making an API Endpoint (GET Request)
 @app.route("/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON")
 def menu_item_json(restaurant_id, menu_id):
     """

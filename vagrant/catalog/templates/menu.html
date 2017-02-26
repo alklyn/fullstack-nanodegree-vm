@@ -1,56 +1,39 @@
-{% extends "base.html" %}
+{% extends "base_list_page.html" %}
 
-{% block title %}
-    {{ restaurant.name }} - Menu
+
+{% block heading %}
+    <h1> {{ restaurant.name }} - Menu</h1>
 {% endblock %}
 
-{% block content %}
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3 menu-header">
-                <h1> {{ restaurant.name }} - Menu</h1>
-                <a href="{{ url_for('new_menu_item', restaurant_id=restaurant.id) }}">
-                    <span class="glyphicon glyphicon-plus custom-glyph" aria-hidden="true">Add</span>
+{% block create_new %}
+    <a href="{{ url_for('new_menu_item', restaurant_id=restaurant.id) }}">
+        <span class="glyphicon glyphicon-plus"></span>
+        Create new menu item.
+    </a>
+{% endblock %}
+
+{% block list_items %}
+    {% for menu_item in menu%}
+        <li>
+            <div>{{ menu_item.name }}</div>
+            <div>{{ menu_item.price }}</div>
+            <div>{{ menu_item.description }}</div>
+            <div>
+                <a href="{{ url_for('menu_item_json', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
+                    View menu item JSON
                 </a>
             </div>
-
-            {% with messages = get_flashed_messages() %}
-                <ul panel panel-info>
-                {% for message in messages %}
-                    <li class="col-md-6 col-md-offset-3 alert alert-success" role="alert">
-                        {{ message }}
-                    </li>
-                {% endfor %}
-                </ul>
-            {% endwith %}
-
-            <div class="col-md-6 col-md-offset-3">
-                <div class="panel panel-primary">
-                    <ol>
-                    {% for menu_item in menu%}
-                        <li>
-                            <div>{{ menu_item.name }}</div>
-                            <div>{{ menu_item.price }}</div>
-                            <div>{{ menu_item.description }}</div>
-                            <div>
-                                <a href="{{ url_for('menu_item_json', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
-                                    View menu item JSON
-                                </a>
-                            </div>
-                            <div>
-                                <a href="{{ url_for('edit_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
-                                    Edit
-                                </a>
-                            </div>
-                            <div>
-                                <a href="{{ url_for('delete_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
-                                    Delete
-                                </a>
-                            </div>
-                        </li>
-                        <hr>
-                    {% endfor %}
-                    </ol>
-                </div>
+            <div>
+                <a href="{{ url_for('edit_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
+                    Edit
+                </a>
             </div>
-        </div>
+            <div>
+                <a href="{{ url_for('delete_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
+                    Delete
+                </a>
+            </div>
+        </li>
+        <hr>
+    {% endfor %}
 {% endblock %}

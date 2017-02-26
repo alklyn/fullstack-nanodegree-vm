@@ -12,6 +12,13 @@ session = DBSession()
 
 app = Flask(__name__) # Create an instance of the Flask class
 
+courses = [
+    "Appetizer",
+    "Entree",
+    "Dessert",
+    "Beverage"
+]
+
 # Making an API Endpoint (GET Request)
 @app.route("/restaurants/<int:restaurant_id>/menu/JSON")
 def restaurant_menu_json(restaurant_id):
@@ -106,7 +113,10 @@ def new_menu_item(restaurant_id):
     else:
         restaurant = \
             session.query(Restaurant).filter_by(id=restaurant_id).first()
-        return render_template("new_menu_item.html", restaurant=restaurant)
+        return render_template(
+            "new_menu_item.html",
+            restaurant=restaurant,
+            courses=courses)
 
 
 @app.route(
@@ -116,7 +126,34 @@ def edit_menu_item(restaurant_id, menu_id):
     """
     Edit selected menu item.
     """
-    return "This page will edit item {}.".format(menu_id)
+    if request.method == "POST":
+        if request.form["choice"] == "edit":
+            menu_item = \
+                session.query(MenuItem).filter_by(id=menu_id).first()
+
+            menu_item.name = request.form["name"]
+            menu_item.description = request.form["description"]
+            menu_item.price = request.form["price"]
+            menu_item.course = request.form["course"]
+
+            session.add(menu_item)
+            session.commit()
+            flash("Menu item edited.")
+        # Display the newly edited menu item
+        return redirect(url_for('menu', restaurant_id=restaurant_id))
+
+    else:
+        restaurant = \
+            session.query(Restaurant).filter_by(id=restaurant_id).first()
+        menu_item = \
+            session.query(MenuItem).filter_by(id=menu_id).first()
+
+        return render_template(
+            "edit_menu_item.html",
+            restaurant=restaurant,
+            menu_item=menu_item,
+            courses=courses)
+
 
 @app.route(
     "/restaurants/delete_menu_item/<int:restaurant_id>/<int:menu_id>/",

@@ -1,7 +1,10 @@
-input, textarea {
-    width: 100vw;
+input, textarea, select {
     margin-left: 1vw;
     margin-right: 1vw;
+}
+
+input, textarea {
+    width: 100vw;
 }
 
 

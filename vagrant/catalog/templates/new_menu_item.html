@@ -24,7 +24,11 @@
         </label>
         <label>
             Course
-            <input type="text" name="course">
+            <select name="course">
+                {% for course in courses%}
+                <<option value="{{ course }}">{{ course }}</option>
+                {% endfor %}
+            </select>
         </label>
         <div>
             <button class="btn btn-default" name="choice" value="create"> Create </button>

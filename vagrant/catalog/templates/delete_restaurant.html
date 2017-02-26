@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block form %}
-<form method="POST" action="{{ url_for('edit_restaurant', restaurant_id=restaurant.id) }}">
+<form method="POST" action="{{ url_for('delete_restaurant', restaurant_id=restaurant.id) }}">
     <button class="btn btn-default" name="choice" value="delete"> Delete </button>
     <button class="btn btn-default" name="choice" value="cancel"> Cancel </button>
 </form>

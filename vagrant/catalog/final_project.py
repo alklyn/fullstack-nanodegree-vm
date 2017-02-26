@@ -101,8 +101,20 @@ def delete_restaurant(restaurant_id):
     """
     Delete restaurant.
     """
-    restaurant = fake_db.restaurant
-    return render_template("delete_restaurant.html", restaurant=restaurant)
+    if request.method == "POST":
+        if request.form["choice"] == "delete":
+            restaurant = \
+                session.query(Restaurant).filter_by(id=restaurant_id).one()
+            session.delete(restaurant)
+            session.commit()
+
+            flash("Restaurant deleted.")
+        return redirect(url_for('restaurants'))
+
+    else:
+        restaurant = \
+            session.query(Restaurant).filter_by(id=restaurant_id).one()
+        return render_template("delete_restaurant.html", restaurant=restaurant)
 
 
 @app.route("/restaurants/<int:restaurant_id>/")

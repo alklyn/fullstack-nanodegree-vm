@@ -162,7 +162,27 @@ def delete_menu_item(restaurant_id, menu_id):
     """
     Delete the selected menu item.
     """
-    return "This page will delete menu item {}.".format(menu_id)
+    if request.method == "POST":
+        if request.form["choice"] == "delete":
+            menu_item = \
+                session.query(MenuItem).filter_by(id=menu_id).first()
+
+            session.delete(menu_item)
+            session.commit()
+            flash("Menu item deleted.")
+        # Display list of menu items
+        return redirect(url_for('menu', restaurant_id=restaurant_id))
+
+    else:
+        restaurant = \
+            session.query(Restaurant).filter_by(id=restaurant_id).first()
+        menu_item = \
+            session.query(MenuItem).filter_by(id=menu_id).first()
+
+        return render_template(
+            "delete_menu_item.html",
+            restaurant=restaurant,
+            menu_item=menu_item)
 
 
 if __name__ == "__main__":

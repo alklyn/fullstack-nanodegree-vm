@@ -1,38 +1,18 @@
-{% extends "base.html" %}
+{% extends "base_form_page.html" %}
 
 {% block title %}
     Delete Menu Item
 {% endblock %}
 
-{% block styles %}
-    {{ super() }}
-    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/forms.css') }}">
+{% block panel_heading %}
+    Delete Menu Item - "{{ menu_item.name }}"
 {% endblock %}
 
-{% block content %}
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <h1> {{ restaurant.name }} </h1>
-                <form method="POST" action="{{ url_for('delete_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
-                    <div class="panel panel-default">
-                        <div class="col-sm-10 input-group">
-                            {{ menu_item.name }}
-                        </div>
-                        <div class="col-sm-10 input-group">
-                            {{ menu_item.description }}
-                        </div>
-                        <div class="col-sm-10 input-group">
-                            {{ menu_item.price }}
-                        </div>
-                        <div class="col-sm-10 input-group">
-                            {{ menu_item.course }}
-                        </div>
-                        <div class="col-sm-10 input-group">
-                            <button class="btn btn-default" name="choice" value="delete"> Delete </button>
-                            <button class="btn btn-default" name="choice" value="cancel"> Cancel </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+{% block form %}
+    <form method="POST" action="{{ url_for('delete_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
+        <div>
+            <button class="btn btn-default" name="choice" value="delete"> Delete </button>
+            <button class="btn btn-default" name="choice" value="cancel"> Cancel </button>
         </div>
+    </form>
 {% endblock %}

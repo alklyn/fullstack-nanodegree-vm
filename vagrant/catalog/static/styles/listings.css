@@ -1,4 +1,4 @@
-.create-new, div.flasher {
+.create-new, div.flasher, .link-to-main {
     border-bottom: 0.2vh solid #337ab7;
     margin-bottom: 3vh;
 }
@@ -6,8 +6,4 @@
 li.flasher {
     color: #33b77a;
     font-size: 2em;
-}
-
-.menu-item-name, .menu-item-description, .menu-item-price {
-    font-family: 'Nova Oval', cursive;
 }

@@ -10,6 +10,11 @@ body , .container-flex, .row{
     height: 100vh;
 }
 
+body {
+    font-family: 'Nova Oval', cursive;
+}
+
+
 .container-flex {
     overflow-x: hidden;
 }

@@ -35,6 +35,13 @@
                         {% endif %}
                     {% endwith %}
 
+                    <div class="link-to-main">
+                        <a href="{{ url_for('restaurants') }}">
+                            <span class="glyphicon glyphicon-home"></span>
+                            Home
+                        </a>
+                    </div>
+
                     <div class="create-new">
                         {% block create_new %}
                         {% endblock %}

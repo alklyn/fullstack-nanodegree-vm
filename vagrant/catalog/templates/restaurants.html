@@ -19,30 +19,39 @@
     {% for restaurant in restaurants %}
     <li>
         <div>{{ restaurant.name }}</div>
-        <div>
-            <a href="{{ url_for('show_menu', restaurant_id=restaurant.id) }}">
-                Show menu
-            </a>
-        </div>
-        <div>
-            <a href="{{ url_for('restaurants_json') }}">
-                Show a list of restaurants in JSON
-            </a>
-        </div>
-        <div>
-            <a href="{{ url_for('restaurant_menu_json', restaurant_id=restaurant.id) }}">
-                Show menu in JSON
-            </a>
-        </div>
-        <div>
-            <a href="{{ url_for('edit_restaurant', restaurant_id=restaurant.id) }}">
-                Edit restaurant
-            </a>
-        </div>
-        <div>
-            <a href="{{ url_for('delete_restaurant', restaurant_id=restaurant.id) }}">
-                Delete restaurant
-            </a>
+
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Options
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="options">
+                <li>
+                    <a href="{{ url_for('show_menu', restaurant_id=restaurant.id) }}">
+                        Show Menu
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('edit_restaurant', restaurant_id=restaurant.id) }}">
+                        Edit Restaurant
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('delete_restaurant', restaurant_id=restaurant.id) }}">
+                        Delete Restaurant
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('restaurants_json') }}">
+                        View Restaurants In JSON
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('restaurant_menu_json', restaurant_id=restaurant.id) }}">
+                        View Restaurant Menus In JSON
+                    </a>
+                </li>
+            </ul>
         </div>
     </li>
     <hr>

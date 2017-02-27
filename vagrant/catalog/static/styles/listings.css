@@ -8,6 +8,6 @@ li.flasher {
     font-size: 2em;
 }
 
-.menu-item-property {
+.menu-item-name, .menu-item-description, .menu-item-price {
     font-family: 'Nova Oval', cursive;
 }

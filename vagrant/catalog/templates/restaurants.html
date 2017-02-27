@@ -17,7 +17,7 @@
 
 {% block list_items %}
     {% for restaurant in restaurants %}
-    <li>
+    <div class="list-item">
         <div><h4>{{ restaurant.name }}</h4></div>
 
         <div class="dropdown">
@@ -53,7 +53,7 @@
                 </li>
             </ul>
         </div>
-    </li>
+    </div>
     <hr>
     {% endfor %}
 {% endblock %}

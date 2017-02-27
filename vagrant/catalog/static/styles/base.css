@@ -6,6 +6,20 @@ html {
   box-sizing: inherit;
 }
 
+.container-flex {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+
+.main-panel{
+    margin-top: 5vh;
+}
+
+.panel-heading {
+    margin-bottom: 3vh;
+}
+
 .menu-header {
     display: flex;
 }

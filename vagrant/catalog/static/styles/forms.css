@@ -12,26 +12,8 @@ textarea {
     overflow-y: scroll;
 }
 
-.create-new, div.flasher {
-    border-bottom: 0.2vh solid #337ab7;
-    margin-bottom: 3vh;
-}
-
-li.flasher {
-    color: #33b77a;
-    font-size: 2em;
-}
-
-.main-panel{
-    margin-top: 5vh;
-}
-
 label {
     display: flex;
-}
-
-.panel-heading {
-    margin-bottom: 3vh;
 }
 
 .label-name + input {

@@ -18,35 +18,40 @@
 
 
 {% block list_items %}
-    {% for menu_item in menu%}
-        <div class="list-item">
-            <div class="menu-item-name "><h4>{{ menu_item.name }}</h4></div>
-            <div class="menu-item-description">{{ menu_item.description }}</div>
-            <div class="menu-item-price">{{ menu_item.price }}</div>
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Options
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="options">
-                    <li>
-                        <a href="{{ url_for('edit_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
-                            Edit
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('delete_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
-                            Delete
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('menu_item_json', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
-                            View in JSON
-                        </a>
-                    </li>
-                </ul>
-            </div>
+    {% for menu in menus%}
+        <div class="{{ loop.cycle('even', 'odd') }}">
+            <h3>{{ courses[loop.index0] }}s</h3>
+            {% for menu_item in menu%}
+                <div class="list-item">
+                    <div class="menu-item-name "><h4>{{ menu_item.name }}</h4></div>
+                    <div class="menu-item-description">{{ menu_item.description }}</div>
+                    <div class="menu-item-price">Price: {{ menu_item.price }}</div>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Options
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="options">
+                            <li>
+                                <a href="{{ url_for('edit_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
+                                    Edit
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('delete_menu_item', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
+                                    Delete
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('menu_item_json', restaurant_id=restaurant.id, menu_id=menu_item.id) }}">
+                                    View in JSON
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
         </div>
-        <hr>
     {% endfor %}
 {% endblock %}

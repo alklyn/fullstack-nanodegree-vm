@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect, flash
 from flask import jsonify
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
 import fake_db
@@ -131,8 +131,21 @@ def show_menu(restaurant_id=-1):
     Display menu for the selected restaurant.
     """
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
-    menu = session.query(MenuItem).filter_by(restaurant_id=restaurant.id)
-    return render_template("menu.html", restaurant=restaurant, menu=menu)
+
+    menus = list()
+    for course in courses:
+        # Make separate queries for each course
+        print("course: {}".format(course))
+        menus.append(session.query(MenuItem)\
+            .filter(and_(MenuItem.restaurant_id == restaurant.id,
+            MenuItem.course == course))\
+            .order_by(MenuItem.course, MenuItem.name))
+
+    return render_template(
+        "menu.html",
+        restaurant=restaurant,
+        menus=menus,
+        courses=courses)
 
 
 @app.route(

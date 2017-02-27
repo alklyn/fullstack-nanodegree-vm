@@ -11,3 +11,11 @@ li.flasher {
 .list-item {
     margin-left: 2vw;
 }
+
+.even {
+    background-color: #ffffe0;
+}
+
+.odd {
+    background-color: #f0fff0;
+}

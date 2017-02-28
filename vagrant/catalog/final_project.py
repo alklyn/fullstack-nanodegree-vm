@@ -1,9 +1,14 @@
 from flask import Flask, render_template, url_for, request, redirect, flash
 from flask import jsonify
+from flask import session as login_session
+import random
+import string
+
 from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
 import fake_db
+
 
 engine = create_engine("sqlite:///restaurantmenu.db")
 Base.metadata.bind = engine
@@ -19,7 +24,19 @@ courses = [
     "Beverage"
 ]
 
-@app.route("/restaurants/JSON")
+
+@app.route("/login/")
+def show_login():
+    """
+    Create a state token to prevent request forgery.
+    Store it in the session for later validation.
+    """
+    state = "".join(random.choice(string.ascii_uppercase + string.digits)
+        for x in xrange(32))
+    login_session["state"] = state
+    return "The current session state is {}".format(login_session["state"])
+
+@app.route("/restaurants/JSON/")
 def restaurants_json():
     """
     JSON API Endpoint
@@ -28,7 +45,7 @@ def restaurants_json():
     return jsonify(menu=[restaurant.serialize for restaurant in restaurants])
 
 
-@app.route("/restaurants/<int:restaurant_id>/menu/JSON")
+@app.route("/restaurants/<int:restaurant_id>/menu/JSON/")
 def restaurant_menu_json(restaurant_id):
     """
     JSON API Endpoint
@@ -39,7 +56,7 @@ def restaurant_menu_json(restaurant_id):
     return jsonify(menu=[item.serialize for item in menu_items])
 
 
-@app.route("/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON")
+@app.route("/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON/")
 def menu_item_json(restaurant_id, menu_id):
     """
     JSON API Endpoint
@@ -125,7 +142,7 @@ def delete_restaurant(restaurant_id):
 
 
 @app.route("/restaurants/<int:restaurant_id>/")
-@app.route("/restaurants/<int:restaurant_id>/show_menu")
+@app.route("/restaurants/<int:restaurant_id>/show_menu/")
 def show_menu(restaurant_id=-1):
     """
     Display menu for the selected restaurant.

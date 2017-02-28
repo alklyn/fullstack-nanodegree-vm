@@ -1,2 +1,4 @@
 tournament/tournament.pyc
 *.pyc
+*.db
+

@@ -128,7 +128,9 @@ def gconnect():
     login_session['email'] = data['email']
 
     # Create a new user if the user is not already in the database
-    login_session['user_id'] = get_user_info()
+    print("email = {}".format(login_session['email']))
+    login_session['user_id'] = get_user_id(login_session['email'])
+    print("User id = {}".format(get_user_id(login_session['email'])))
     if login_session['user_id'] is None:
         login_session['user_id'] = create_user(login_session)
 
@@ -439,10 +441,10 @@ def get_user_info(user_id):
     return user
 
 
-def get_user_info():
+def get_user_id(email):
     try:
-        user = session.query(User).filter_by(email=login_session["email"]).one()
-        return user_id
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
     except:
         return None
 

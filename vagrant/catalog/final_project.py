@@ -21,7 +21,7 @@ import requests
 
 from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Restaurant, MenuItem
+from database_setup import Base, Restaurant, MenuItem, User
 
 
 engine = create_engine("sqlite:///restaurantmenu.db")
@@ -127,6 +127,12 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    # Create a new user if the user is not already in the database
+    login_session['user_id'] = get_user_info()
+    if login_session['user_id'] is None:
+        login_session['user_id'] = create_user(login_session)
+
+
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -221,7 +227,8 @@ def new_restaurant():
 
     if request.method == "POST":
         if request.form["choice"] == "create":
-            restaurant = Restaurant(name=request.form["name"])
+            user_id = login_session["user_id"]
+            restaurant = Restaurant(name=request.form["name"], user_id=user_id)
             session.add(restaurant)
             session.commit()
 
@@ -318,6 +325,7 @@ def new_menu_item(restaurant_id):
     if "username" not in login_session:
         return redirect("/login/")
 
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).first()
     if request.method == "POST":
         if request.form["choice"] == "create":
             new_item = MenuItem(
@@ -325,17 +333,17 @@ def new_menu_item(restaurant_id):
                 description=request.form["description"],
                 price=request.form["price"],
                 course=request.form["course"],
-                restaurant_id=restaurant_id)
+                restaurant_id=restaurant_id,
+                user_id=restaurant.user_id
+                )
 
             session.add(new_item)
             session.commit()
-            flash("Menu Item Created.")
+            flash("New Menu Item '{}' Created.".format(new_item.name))
         # Display the newly created menu item
         return redirect(url_for('show_menu', restaurant_id=restaurant_id))
 
     else:
-        restaurant = \
-            session.query(Restaurant).filter_by(id=restaurant_id).first()
         return render_template(
             "new_menu_item.html",
             restaurant=restaurant,
@@ -412,6 +420,31 @@ def delete_menu_item(restaurant_id, menu_id):
             "delete_menu_item.html",
             restaurant=restaurant,
             menu_item=menu_item)
+
+
+def create_user(login_session):
+    new_user = User(
+        name=login_session["username"],
+        email=login_session["email"],
+        picture=login_session["picture"])
+    session.add(new_user)
+    session.commit()
+
+    user = session.query(User).filter_by(email=login_session["email"]).one()
+    return user.id
+
+
+def get_user_info(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def get_user_info():
+    try:
+        user = session.query(User).filter_by(email=login_session["email"]).one()
+        return user_id
+    except:
+        return None
 
 
 if __name__ == "__main__":

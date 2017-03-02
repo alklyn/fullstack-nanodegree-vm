@@ -216,6 +216,9 @@ def new_restaurant():
     """
     Add a new restaurant.
     """
+    if "username" not in login_session:
+        return redirect("/login/")
+
     if request.method == "POST":
         if request.form["choice"] == "create":
             restaurant = Restaurant(name=request.form["name"])
@@ -236,6 +239,9 @@ def edit_restaurant(restaurant_id):
     """
     Edit restaurant details.
     """
+    if "username" not in login_session:
+        return redirect("/login/")
+
     if request.method == "POST":
         if request.form["choice"] == "edit":
             restaurant = \
@@ -260,6 +266,9 @@ def delete_restaurant(restaurant_id):
     """
     Delete restaurant.
     """
+    if "username" not in login_session:
+        return redirect("/login/")
+
     if request.method == "POST":
         if request.form["choice"] == "delete":
             restaurant = \
@@ -306,6 +315,9 @@ def new_menu_item(restaurant_id):
     """
     Create a new menu item for the selected restaurant.
     """
+    if "username" not in login_session:
+        return redirect("/login/")
+
     if request.method == "POST":
         if request.form["choice"] == "create":
             new_item = MenuItem(
@@ -337,6 +349,9 @@ def edit_menu_item(restaurant_id, menu_id):
     """
     Edit selected menu item.
     """
+    if "username" not in login_session:
+        return redirect("/login/")
+
     if request.method == "POST":
         if request.form["choice"] == "edit":
             menu_item = \
@@ -373,6 +388,9 @@ def delete_menu_item(restaurant_id, menu_id):
     """
     Delete the selected menu item.
     """
+    if "username" not in login_session:
+        return redirect("/login/")
+
     if request.method == "POST":
         if request.form["choice"] == "delete":
             menu_item = \

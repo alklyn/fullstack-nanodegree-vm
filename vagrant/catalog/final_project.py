@@ -169,6 +169,7 @@ def gdisconnect():
     	del login_session['username']
     	del login_session['email']
     	del login_session['picture']
+    	del login_session['user_id']
     	response = make_response(json.dumps('Successfully disconnected.'), 200)
     	response.headers['Content-Type'] = 'application/json'
     	return response
@@ -213,10 +214,23 @@ def menu_item_json(restaurant_id, menu_id):
 @app.route("/restaurants/")
 def restaurants():
     """
-    Display restaurants
+    Display restaurants.
+    Only the owner of a restaurant has the options to edit or view it.
     """
     restaurants = session.query(Restaurant).order_by(Restaurant.id).all()
-    return render_template("restaurants.html", restaurants=restaurants)
+
+    if "user_id" not in login_session:
+        return render_template(
+            "restaurants.html",
+            restaurants=restaurants,
+            current_user_id=None)
+    else:
+        current_user_id = login_session["user_id"]
+        print("current_user_id: {}".format(current_user_id))
+        return render_template(
+            "restaurants.html",
+            restaurants=restaurants,
+            current_user_id=current_user_id)
 
 
 @app.route("/restaurants/new_restaurant/", methods=["GET", "POST"])

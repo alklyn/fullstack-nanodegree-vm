@@ -10,10 +10,12 @@
 {% endblock %}
 
 {% block create_new %}
-    <a href="{{ url_for('new_menu_item', restaurant_id=restaurant.id) }}">
-        <span class="glyphicon glyphicon-plus"></span>
-        Create new menu item.
-    </a>
+    <div class="create-new">
+        <a href="{{ url_for('new_menu_item', restaurant_id=restaurant.id) }}">
+            <span class="glyphicon glyphicon-plus"></span>
+            Create new menu item.
+        </a>
+    </div>
 {% endblock %}
 
 

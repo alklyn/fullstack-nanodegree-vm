@@ -215,22 +215,20 @@ def menu_item_json(restaurant_id, menu_id):
 def restaurants():
     """
     Display restaurants.
-    Only the owner of a restaurant has the options to edit or view it.
+    Only the creator of a restaurant has the options to edit or delete it.
     """
     restaurants = session.query(Restaurant).order_by(Restaurant.id).all()
 
     if "user_id" not in login_session:
-        return render_template(
-            "restaurants.html",
-            restaurants=restaurants,
-            current_user_id=None)
+        current_user_id = None
     else:
         current_user_id = login_session["user_id"]
-        print("current_user_id: {}".format(current_user_id))
-        return render_template(
-            "restaurants.html",
-            restaurants=restaurants,
-            current_user_id=current_user_id)
+
+    print("current_user_id: {}".format(current_user_id))
+    return render_template(
+        "restaurants.html",
+        restaurants=restaurants,
+        current_user_id=current_user_id)
 
 
 @app.route("/restaurants/new_restaurant/", methods=["GET", "POST"])
@@ -266,7 +264,7 @@ def edit_restaurant(restaurant_id):
     if "username" not in login_session:
         return redirect("/login/")
     elif login_session["user_id"] != restaurant.user_id:
-        flash("Only the owner can edit a restaurant.")
+        flash("Only the creator can edit a restaurant.")
         return redirect(url_for('restaurants'))
 
     if request.method == "POST":
@@ -296,7 +294,7 @@ def delete_restaurant(restaurant_id):
     if "username" not in login_session:
         return redirect("/login/")
     elif login_session["user_id"] != restaurant.user_id:
-        flash("Only the owner can delete a restaurant.")
+        flash("Only the creator can delete a restaurant.")
         return redirect(url_for('restaurants'))
 
     if request.method == "POST":
@@ -320,8 +318,16 @@ def delete_restaurant(restaurant_id):
 def show_menu(restaurant_id=-1):
     """
     Display menu for the selected restaurant.
+    Only the creator of a restaurant has the options to edit or delete menu
+    items in it.
     """
+    if "user_id" not in login_session:
+        current_user_id = None
+    else:
+        current_user_id = login_session["user_id"]
+
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    creator = get_user_info(restaurant.user_id)
 
     menus = list()
     for course in courses:
@@ -336,7 +342,9 @@ def show_menu(restaurant_id=-1):
         "menu.html",
         restaurant=restaurant,
         menus=menus,
-        courses=courses)
+        courses=courses,
+        creator=creator,
+        current_user_id=current_user_id)
 
 
 @app.route(

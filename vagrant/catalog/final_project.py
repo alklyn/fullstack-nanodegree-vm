@@ -250,7 +250,6 @@ def new_restaurant():
 
             flash("New Restaurant Created.")
         return redirect(url_for('restaurants'))
-
     else:
         return render_template("new_restaurant.html")
 
@@ -262,13 +261,16 @@ def edit_restaurant(restaurant_id):
     """
     Edit restaurant details.
     """
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
     if "username" not in login_session:
         return redirect("/login/")
+    elif login_session["user_id"] != restaurant.user_id:
+        flash("Only the owner can edit a restaurant.")
+        return redirect(url_for('restaurants'))
 
     if request.method == "POST":
         if request.form["choice"] == "edit":
-            restaurant = \
-                session.query(Restaurant).filter_by(id=restaurant_id).one()
             restaurant.name = request.form["name"]
             session.add(restaurant)
             session.commit()
@@ -289,8 +291,13 @@ def delete_restaurant(restaurant_id):
     """
     Delete restaurant.
     """
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
     if "username" not in login_session:
         return redirect("/login/")
+    elif login_session["user_id"] != restaurant.user_id:
+        flash("Only the owner can delete a restaurant.")
+        return redirect(url_for('restaurants'))
 
     if request.method == "POST":
         if request.form["choice"] == "delete":

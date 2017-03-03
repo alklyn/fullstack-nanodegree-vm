@@ -353,10 +353,14 @@ def new_menu_item(restaurant_id):
     """
     Create a new menu item for the selected restaurant.
     """
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
     if "username" not in login_session:
         return redirect("/login/")
+    elif login_session["user_id"] != restaurant.user_id:
+        flash("Only the creator can add a new menu item.")
+        return redirect(url_for('show_menu', restaurant_id=restaurant_id))
 
-    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).first()
     if request.method == "POST":
         if request.form["choice"] == "create":
             new_item = MenuItem(
@@ -388,8 +392,13 @@ def edit_menu_item(restaurant_id, menu_id):
     """
     Edit selected menu item.
     """
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
     if "username" not in login_session:
         return redirect("/login/")
+    elif login_session["user_id"] != restaurant.user_id:
+        flash("Only the creator can edit a menu item.")
+        return redirect(url_for('show_menu', restaurant_id=restaurant_id))
 
     if request.method == "POST":
         if request.form["choice"] == "edit":
@@ -408,8 +417,6 @@ def edit_menu_item(restaurant_id, menu_id):
         return redirect(url_for('show_menu', restaurant_id=restaurant_id))
 
     else:
-        restaurant = \
-            session.query(Restaurant).filter_by(id=restaurant_id).first()
         menu_item = \
             session.query(MenuItem).filter_by(id=menu_id).first()
 
@@ -427,8 +434,13 @@ def delete_menu_item(restaurant_id, menu_id):
     """
     Delete the selected menu item.
     """
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+
     if "username" not in login_session:
         return redirect("/login/")
+    elif login_session["user_id"] != restaurant.user_id:
+        flash("Only the creator can delete a menu item.")
+        return redirect(url_for('show_menu', restaurant_id=restaurant_id))
 
     if request.method == "POST":
         if request.form["choice"] == "delete":
@@ -442,8 +454,6 @@ def delete_menu_item(restaurant_id, menu_id):
         return redirect(url_for('show_menu', restaurant_id=restaurant_id))
 
     else:
-        restaurant = \
-            session.query(Restaurant).filter_by(id=restaurant_id).first()
         menu_item = \
             session.query(MenuItem).filter_by(id=menu_id).first()
 

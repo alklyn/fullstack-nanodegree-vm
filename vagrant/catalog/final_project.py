@@ -88,7 +88,7 @@ def fbconnect():
     session['provider'] = 'facebook'
     session['username'] = data["name"]
     session['email'] = data["email"]
-    session['facebook_id'] = data["id"]
+    session['provider_uid'] = data["id"]
 
     # The token must be stored in the session in order to properly logout, let's strip out the information before the equals sign in our token
     stored_token = token.split("=")[1]
@@ -119,17 +119,6 @@ def fbconnect():
 
     flash("Now logged in as %s" % session['username'])
     return output
-
-
-@app.route('/fbdisconnect/')
-def fbdisconnect():
-    facebook_id = session['facebook_id']
-    # The access token must me included to successfully logout
-    access_token = session['access_token']
-    url = 'https://graph.facebook.com/%s/permissions?access_token=%s' % (facebook_id,access_token)
-    h = httplib2.Http()
-    result = h.request(url, 'DELETE')[1]
-    return "you have been logged out"
 
 
 @app.route('/gconnect', methods=['POST'])
@@ -166,8 +155,8 @@ def gconnect():
         return response
 
     # Verify that the access token is used for the intended user.
-    gplus_id = credentials.id_token['sub']
-    if result['user_id'] != gplus_id:
+    provider_uid = credentials.id_token['sub']
+    if result['user_id'] != provider_uid:
         response = make_response(
             json.dumps("Token's user ID doesn't match given user ID."), 401)
         response.headers['Content-Type'] = 'application/json'
@@ -182,8 +171,8 @@ def gconnect():
         return response
 
     stored_access_token = session.get('access_token')
-    stored_gplus_id = session.get('gplus_id')
-    if stored_access_token is not None and gplus_id == stored_gplus_id:
+    stored_gplus_id = session.get('provider_uid')
+    if stored_access_token is not None and provider_uid == stored_gplus_id:
         response = make_response(json.dumps('Current user is already connected.'),
                                  200)
         response.headers['Content-Type'] = 'application/json'
@@ -191,7 +180,7 @@ def gconnect():
 
     # Store the access token in the session for later use.
     session['access_token'] = credentials.access_token
-    session['gplus_id'] = gplus_id
+    session['provider_uid'] = provider_uid
 
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
@@ -200,6 +189,7 @@ def gconnect():
 
     data = answer.json()
 
+    session['provider'] = 'google'
     session['username'] = data['name']
     session['picture'] = data['picture']
     session['email'] = data['email']
@@ -224,10 +214,11 @@ def gconnect():
     return output
 
 
-@app.route('/gdisconnect/')
-def gdisconnect():
+@app.route('/disconnect/')
+def disconnect():
+    print("provider: {}".format(session['provider']))
     access_token = session['access_token']
-    print 'In gdisconnect access token is %s', access_token
+    print 'In disconnect access token is %s', access_token
     print 'User name is: '
     print session['username']
     if access_token is None:
@@ -235,14 +226,21 @@ def gdisconnect():
     	response = make_response(json.dumps('Current user not connected.'), 401)
     	response.headers['Content-Type'] = 'application/json'
     	return response
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % session['access_token']
+
+    if session['provider'] == 'google':
+        url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' \
+            % session['access_token']
+    elif session['provider'] == 'facebook':
+        url = 'https://graph.facebook.com/%s/permissions?access_token=%s' \
+            % (session['provider_uid'], session['access_token'])
+
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
     print 'result is '
     print result
     if result['status'] == '200':
 	del session['access_token']
-    	del session['gplus_id']
+    	del session['provider_uid']
     	del session['username']
     	del session['email']
     	del session['picture']
@@ -251,7 +249,6 @@ def gdisconnect():
     	response.headers['Content-Type'] = 'application/json'
     	return response
     else:
-
     	response = make_response(json.dumps('Failed to revoke token for given user.', 400))
     	response.headers['Content-Type'] = 'application/json'
     	return response

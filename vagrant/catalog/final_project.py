@@ -488,6 +488,11 @@ def get_user_id(email):
         return None
 
 
+@app.template_filter("capitalize_words")
+def capitalize_word(my_str):
+    return my_str.title()
+
+
 if __name__ == "__main__":
     app.secret_key = "Ut0ndr1agr14*$hi7mh@7ayAk0*"
     app.debug = True

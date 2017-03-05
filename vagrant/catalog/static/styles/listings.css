@@ -19,3 +19,8 @@ li.flasher {
 .odd {
     background-color: #f0fff0;
 }
+
+img {
+    max-width: 10vw;
+    max-height: 10vh;
+}

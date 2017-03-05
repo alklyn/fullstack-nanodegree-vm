@@ -7,6 +7,10 @@
 
 {% block heading %}
     {{ restaurant.name }} - Menu
+    <figure class="creator">
+        <img src="{{ creator.picture}}">
+        <figcaption>Prepared by {{ creator.name | capitalize_words }}</figcaption>
+    </figure>
 {% endblock %}
 
 {% block create_new %}

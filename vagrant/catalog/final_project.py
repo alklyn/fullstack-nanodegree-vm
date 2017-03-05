@@ -247,7 +247,8 @@ def disconnect():
     	del session['user_id']
     	response = make_response(json.dumps('Successfully disconnected.'), 200)
     	response.headers['Content-Type'] = 'application/json'
-    	return response
+        flash("Logged out successfully.")
+    	return redirect(url_for("restaurants"))
     else:
     	response = make_response(json.dumps('Failed to revoke token for given user.', 400))
     	response.headers['Content-Type'] = 'application/json'

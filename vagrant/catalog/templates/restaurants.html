@@ -9,13 +9,6 @@
 {% endblock %}
 
 {% block create_new %}
-        <div
-            class="fb-like"
-            data-share="true"
-            data-width="450"
-            data-show-faces="true">
-        </div>
-
     {# Only logged in users can create a new restaurant #}
     {% if current_user_id is not none %}
         <div class="create-new">

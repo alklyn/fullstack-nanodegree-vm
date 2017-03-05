@@ -21,6 +21,22 @@
                         </h3>
                     </div>
 
+                    {% if session["user_id"] %}
+                    <div class="login-logout">
+                        <a href="{{ url_for('disconnect') }}">
+                            <span class="glyphicon glyphicon-log-out"></span>
+                            logout - {{ session["username"] }}
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="login-logout">
+                        <a href="{{ url_for('show_login') }}">
+                            <span class="glyphicon glyphicon-log-in"></span>
+                            login
+                        </a>
+                    </div>
+                    {% endif %}
+
                     {% with messages = get_flashed_messages() %}
                         {% if messages %}
                         <div class="flasher">

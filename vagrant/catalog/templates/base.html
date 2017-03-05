@@ -26,11 +26,11 @@
 </head>
 
 <body>
+    {% block fb_sdk %}
+    {% endblock %}
     <div class="container-flex">
         {% block content %}
         {% endblock %}
     </div>
-    {% block custom %}
-    {% endblock %}
 </body>
 </html>

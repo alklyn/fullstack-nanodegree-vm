@@ -1,4 +1,5 @@
 from flask import Flask
+from fake_db import isps, packages
 
 app = Flask(__name__)
 

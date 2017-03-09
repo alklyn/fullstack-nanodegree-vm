@@ -1,0 +1,15 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body , .container-flex, .row{
+    height: 100vh;
+}
+
+body {
+    font-family: 'Nova Oval', cursive;
+}

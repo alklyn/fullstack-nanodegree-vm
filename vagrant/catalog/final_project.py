@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from fake_db import isps, packages
 
 app = Flask(__name__)
@@ -10,7 +10,7 @@ def isp():
     """
     This page will show a list of all the ISPs in the database.
     """
-    return ("This page will show a list of all the ISPs.")
+    return render_template("isps.html", isps=isps)
 
 
 @app.route("/isp/new/", methods=["GET", "POST"])

@@ -1,11 +1,11 @@
 # Fake ISPs
-isps = {
+isps = [
     {"id": 1, "name": "Lightspeed"},
     {"id": 2, "name": "Solid Telecoms"}
-}
+]
 
 # Fake packages
-packages = {
+packages = [
     {
         "id": 1,
         "isp_id": 1,
@@ -77,4 +77,4 @@ packages = {
         "cap": 80,
         "price": 50.00
     }
-}
+]

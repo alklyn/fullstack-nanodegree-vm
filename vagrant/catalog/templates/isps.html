@@ -8,12 +8,18 @@
 {% block content %}
     <div class="container-flex">
         <div class="row">
-            <div class="col-md-4 col-md-offset-4">
+            <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h2>
                             ISPs
                         </h2>
+                    </div>
+                    <div class="">
+                        <a href="{{ url_for('new_isp') }}">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            Add ISP
+                        </a2>
                     </div>
                     {% for isp in isps %}
                     <div class="isp">

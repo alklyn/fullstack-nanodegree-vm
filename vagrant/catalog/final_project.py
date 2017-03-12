@@ -35,8 +35,8 @@ def delete_isp(isp_id):
     """
     This page will be for deleting ISPs in the database.
     """
-    return ("Form to delete ISP {} in the database."
-            .format(isp_id))
+    isp = isps[isp_id]
+    return render_template("delete_isp.html", isp=isp)
 
 
 @app.route("/isp/<int:isp_id>/", methods=["GET", "POST"])

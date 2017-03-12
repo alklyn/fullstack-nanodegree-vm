@@ -18,7 +18,7 @@ def new_isp():
     """
     This page will be for adding a new ISP to the database.
     """
-    return ("This page will be for adding a new isp to the database.")
+    return render_template("new_isp.html")
 
 
 @app.route("/isp/<int:isp_id>/edit/", methods=["GET", "POST"])

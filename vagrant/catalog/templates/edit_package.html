@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Add New Package
+    Edit Package
 {% endblock %}
 
 
@@ -12,27 +12,27 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h4>
-                            Add New Package to {{ isp.name }}
+                            Edit Package to {{ package.name }}
                         </h4>
                     </div>
                     <form method="post" action="{{ url_for('new_isp') }}">
                         <label>
                             Name
-                            <input type="text" name="name">
+                            <input type="text" name="name" value="{{ package.name }}">
                         </label>
                         <label>
                             Bandwidth
-                            <input type="number" name="bandwidth"> Mbps
+                            <input type="number" name="bandwidth" value="{{ package.bandwidth }}"> Mbps
                         </label>
                         <label>
                             Cap
-                            <input type="number" name="cap"> GB
+                            <input type="number" name="cap" value="{{ package.cap }}"> GB
                         </label>
                         <label>
                             Price
-                            <input type="number" name="price">
+                            <input type="number" name="price" value="{{ package.price }}">
                         </label>
-                        <button class="btn btn-default" name="choice" value="create"> Create </button>
+                        <button class="btn btn-default" name="choice" value="edit"> Edit </button>
                         <button class="btn btn-default" name="choice" value="cancel"> Cancel </button>
                     </form>
                 </div>

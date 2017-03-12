@@ -68,7 +68,12 @@ def edit_package(isp_id, package_id):
     """
     This page will be for editing packages in the database.
     """
-    return ("This page will be for editing packages in the database.")
+    isp = isps[isp_id - 1]
+    for package in packages:
+        if package["id"] == package_id:
+            break
+    print("Package: {}".format(package))
+    return render_template("edit_package.html", isp=isp, package=package)
 
 
 @app.route(

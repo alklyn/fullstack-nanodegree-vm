@@ -26,7 +26,7 @@ def edit_isp(isp_id):
     """
     This page will be for editing ISPs in the database.
     """
-    isp = isps[isp_id]
+    isp = isps[isp_id - 1]
     return render_template("edit_isp.html", isp=isp)
 
 
@@ -35,17 +35,30 @@ def delete_isp(isp_id):
     """
     This page will be for deleting ISPs in the database.
     """
-    isp = isps[isp_id]
+    isp = isps[isp_id - 1]
     return render_template("delete_isp.html", isp=isp)
 
 
-@app.route("/isp/<int:isp_id>/", methods=["GET", "POST"])
-@app.route("/isp/<int:isp_id>/packages/", methods=["GET", "POST"])
+@app.route("/isp/<int:isp_id>/")
+@app.route("/isp/<int:isp_id>/packages/")
 def show_packages(isp_id):
     """
     This page will show a list of all the packages offered by the ISP.
     """
-    return ("This page will show this ISP's packages.")
+    isp = isps[isp_id - 1]
+
+    req_packages = [pac for pac in packages if pac["isp_id"] == isp_id]
+    return render_template("packages.html", isp=isp, packages=req_packages)
+
+
+@app.route("/isp/<int:isp_id>/new_package/")
+def new_package(isp_id):
+    """
+    This page will show a list of all the packages offered by the ISP.
+    """
+    isp = isps[isp_id - 1]
+
+    return ("This page will be for adding packages to the database.")
 
 
 @app.route(
@@ -61,7 +74,7 @@ def edit_package(isp_id, package_id):
 @app.route(
     "/isp/<int:isp_id>/packages/<int:package_id>/delete/",
     methods=["GET", "POST"])
-def edit_package(isp_id, package_id):
+def delete_package(isp_id, package_id):
     """
     This page will be for deleting packages in the database.
     """

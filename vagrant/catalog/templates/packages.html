@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Packages
+{% endblock %}
+
+
+{% block content %}
+    <div class="container-flex">
+        <div class="row">
+            <div class="col-md-4  col-md-offset-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h2>
+                            {{ isp.name }} - Packages
+                        </h2>
+                    </div>
+                    <div class="">
+                        <a href="{{ url_for('new_package', isp_id=isp.id) }}">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            Add New Package
+                        </a2>
+                    </div>
+                    {% for package in packages %}
+                    <div class="isp">
+                        <h3>
+                            <a href="{{ url_for('show_packages', isp_id=isp.id) }}" >
+                                Name: {{ package.name }}
+                            </a>
+                        </h3>
+                        <div>
+                            Bandwith: {{ package.bandwidth }} Mbps
+                        </div>
+                        <div>
+                            Cap: {{ package.cap }} GB
+                        </div>
+                        <div>
+                            Price: ${{ package.price }}
+                        </div>
+                        <ul>
+                            <li>
+                                <a href="{{ url_for('edit_package', isp_id=isp.id, package_id=package.id) }}" >
+                                    Edit Package
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('delete_package', isp_id=isp.id, package_id=package.id) }}" >
+                                    Delete Package
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

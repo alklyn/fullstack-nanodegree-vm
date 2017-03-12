@@ -27,7 +27,7 @@ packages = [
     {
         "id": 3,
         "isp_id": 1,
-        "name": "Tier1",
+        "name": "Tier3",
         "bandwidth": 10.0,
         "cap": 40,
         "price": 40.00
@@ -36,7 +36,7 @@ packages = [
     {
         "id": 4,
         "isp_id": 1,
-        "name": "Tier1",
+        "name": "Tier4",
         "bandwidth": 20.0,
         "cap": 80,
         "price": 50.00
@@ -45,7 +45,7 @@ packages = [
     {
         "id": 5,
         "isp_id": 2,
-        "name": "Tier1",
+        "name": "Basic",
         "bandwidth": 1.0,
         "cap": 20,
         "price": 20.00
@@ -54,7 +54,7 @@ packages = [
     {
         "id": 6,
         "isp_id": 2,
-        "name": "Tier2",
+        "name": "Standard",
         "bandwidth": 5.0,
         "cap": 30,
         "price": 27.00
@@ -63,7 +63,7 @@ packages = [
     {
         "id": 7,
         "isp_id": 2,
-        "name": "Tier1",
+        "name": "Super",
         "bandwidth": 10.0,
         "cap": 40,
         "price": 40.00
@@ -72,7 +72,7 @@ packages = [
     {
         "id": 8,
         "isp_id": 2,
-        "name": "Tier1",
+        "name": "Ultra",
         "bandwidth": 20.0,
         "cap": 80,
         "price": 50.00

@@ -26,8 +26,8 @@ def edit_isp(isp_id):
     """
     This page will be for editing ISPs in the database.
     """
-    return (
-        "This page will be for editing ISP {} in the database.".format(isp_id))
+    isp = isps[isp_id]
+    return render_template("edit_isp.html", isp=isp)
 
 
 @app.route("/isp/<int:isp_id>/delete/", methods=["GET", "POST"])

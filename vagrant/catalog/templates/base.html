@@ -11,13 +11,13 @@
     </title>
 
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
-    <link href="https://fonts.googleapis.com/css?family=Nova+Oval" rel="stylesheet">
 
     {% block styles %}
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}">
     {% endblock %}
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='jquery/jquery-1.11.3.min.js') }}"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
     {% block my_js %}
         <!-- Your js here -->

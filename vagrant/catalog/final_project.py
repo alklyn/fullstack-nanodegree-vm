@@ -51,14 +51,14 @@ def show_packages(isp_id):
     return render_template("packages.html", isp=isp, packages=req_packages)
 
 
-@app.route("/isp/<int:isp_id>/new_package/")
+@app.route("/isp/<int:isp_id>/new_package/", methods=["GET", "POST"])
 def new_package(isp_id):
     """
     This page will show a list of all the packages offered by the ISP.
     """
     isp = isps[isp_id - 1]
 
-    return ("This page will be for adding packages to the database.")
+    return render_template("new_package.html", isp=isp)
 
 
 @app.route(

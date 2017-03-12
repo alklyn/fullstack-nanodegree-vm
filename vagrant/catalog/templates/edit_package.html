@@ -15,7 +15,7 @@
                             Edit Package to {{ package.name }}
                         </h4>
                     </div>
-                    <form method="post" action="{{ url_for('new_isp') }}">
+                    <form method="post" action="{{ url_for('edit_package', isp_id=isp.id, package_id=package.id) }}">
                         <label>
                             Name
                             <input type="text" name="name" value="{{ package.name }}">

@@ -15,7 +15,7 @@
                             Add New Package to {{ isp.name }}
                         </h4>
                     </div>
-                    <form method="post" action="{{ url_for('new_isp') }}">
+                    <form method="post" action="{{ url_for('new_package', isp_id=isp.id) }}">
                         <label>
                             Name
                             <input type="text" name="name">

@@ -1,0 +1,41 @@
+import sys
+from sqlalchemy import Column, ForeignKey, Integer, String, Float
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from sqlalchemy import create_engine
+
+Base = declarative_base()
+
+
+class User(Base):
+    __tablename__ = "user"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+    email = Column(String(250), nullable=False)
+    picture = Column(String(250))
+
+
+class Isp(Base):
+    __tablename__ = "isp"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+    bandwidth = Column(Integer, nullable=False)
+    cap = Column(Integer, nullable=False)
+    price = Column(Float, nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))  # The user that added it
+    user = relationship(User)
+
+
+class Package(Base):
+    __tablename__ = "package"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+    isp_id = Column(Integer, ForeignKey('isp.id'))
+    isp = relationship(Isp)
+    user_id = Column(Integer, ForeignKey('user.id'))  # The user that added it
+    user = relationship(User)
+
+
+engine = create_engine('sqlite:///isp.db')
+Base.metadata.create_all(engine)

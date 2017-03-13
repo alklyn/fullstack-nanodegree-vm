@@ -53,7 +53,7 @@ def new_isp():
             isp = ISP(name=request.form["name"], user_id=user_id)
             db_session.add(isp)
             db_session.commit()
-            flash("New ISP Created.")
+            flash("New ISP Successfully Created.")
         return redirect(url_for('show_isps'))
     else:
         return render_template("new_isp.html")
@@ -64,8 +64,16 @@ def edit_isp(isp_id):
     """
     This page will be for editing ISPs in the database.
     """
-    isp = isps[isp_id - 1]
-    return render_template("edit_isp.html", isp=isp)
+    isp = db_session.query(ISP).filter_by(id=isp_id).one()
+    if request.method == "POST":
+        if request.form["choice"] == "edit":
+            isp.name = request.form["name"]
+            db_session.add(isp)
+            db_session.commit()
+            flash("ISP Successfully Edited.")
+        return redirect(url_for('show_isps'))
+    else:
+        return render_template("edit_isp.html", isp=isp)
 
 
 @app.route("/isps/<int:isp_id>/delete/", methods=["GET", "POST"])

@@ -15,7 +15,7 @@
                             Edit {{ isp.name }}
                         </h2>
                     </div>
-                    <form method="post" action="{{ url_for('new_isp') }}">
+                    <form method="post" action="{{ url_for('edit_isp', isp_id=isp.id) }}">
                         <label>
                             Name
                             <input type="text" name="name" value="{{ isp.name }}">

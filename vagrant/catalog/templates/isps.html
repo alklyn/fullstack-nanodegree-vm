@@ -15,12 +15,28 @@
                             ISPs
                         </h2>
                     </div>
+
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <div class="flasher">
+                            <ul panel panel-info>
+                            {% for message in messages %}
+                                <li class="flasher">
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    {% endwith %}
+
                     <div class="">
                         <a href="{{ url_for('new_isp') }}">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                             Add New ISP
                         </a2>
                     </div>
+                    
                     {% for isp in isps %}
                     <div class="isp">
                         <h3>

@@ -81,8 +81,15 @@ def delete_isp(isp_id):
     """
     This page will be for deleting ISPs in the database.
     """
-    isp = isps[isp_id - 1]
-    return render_template("delete_isp.html", isp=isp)
+    isp = db_session.query(ISP).filter_by(id=isp_id).one()
+    if request.method == "POST":
+        if request.form["choice"] == "delete":
+            db_session.delete(isp)
+            db_session.commit()
+            flash("ISP Successfully Deleted.")
+        return redirect(url_for('show_isps'))
+    else:
+        return render_template("delete_isp.html", isp=isp)
 
 
 @app.route("/isps/<int:isp_id>/")

@@ -18,11 +18,9 @@ import json
 from flask import make_response
 import requests
 
-
 from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, ISP, Package, User
-from fake_db import isps, packages
 
 engine = create_engine("sqlite:///isp.db")
 Base.metadata.bind = engine

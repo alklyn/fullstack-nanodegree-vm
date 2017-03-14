@@ -22,6 +22,17 @@ class ISP(Base):
     user_id = Column(Integer, ForeignKey('user.id'))  # The user that added it
     user = relationship(User)
 
+    @property
+    def serialize(self):
+        """
+        Return object data in easily serializeable format.
+        """
+        data = {
+            "id": self.id,
+            "name": self.name
+        }
+        return data
+
 
 class Package(Base):
     __tablename__ = "package"
@@ -34,6 +45,19 @@ class Package(Base):
     isp = relationship(ISP)
     user_id = Column(Integer, ForeignKey('user.id'))  # The user that added it
     user = relationship(User)
+
+    @property
+    def serialize(self):
+        """
+        Return object data in easily serializeable format.
+        """
+        data = {
+            "id": self.id,
+            "name": self.name,
+            "bandwidth": self.bandwidth,
+            "cap": self.cap,
+            "price": self.price
+        }
 
 
 engine = create_engine('sqlite:///isp.db')

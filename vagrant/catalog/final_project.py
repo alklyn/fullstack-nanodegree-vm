@@ -160,11 +160,18 @@ def delete_package(isp_id, package_id):
     """
     This page will be for deleting packages in the database.
     """
-    isp = isps[isp_id - 1]
-    for package in packages:
-        if package["id"] == package_id:
-            break
-    return render_template("delete_package.html", isp=isp, package=package)
+    isp = db_session.query(ISP).filter_by(id=isp_id).one()
+    package = db_session.query(Package).filter_by(id=package_id).one()
+
+    if request.method == "POST":
+        if request.form["choice"] == "delete":
+            db_session.delete(package)
+            db_session.commit()
+            flash("Package Updated.")
+
+        return redirect(url_for('show_packages', isp_id=isp_id))
+    else:
+        return render_template("delete_package.html", isp=isp, package=package)
 
 
 if __name__ == "__main__":

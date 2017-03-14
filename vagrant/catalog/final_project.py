@@ -98,10 +98,10 @@ def show_packages(isp_id):
     """
     This page will show a list of all the packages offered by the ISP.
     """
-    isp = isps[isp_id - 1]
-
-    req_packages = [pac for pac in packages if pac["isp_id"] == isp_id]
-    return render_template("packages.html", isp=isp, packages=req_packages)
+    isp = db_session.query(ISP).filter_by(id=isp_id).one()
+    packages = db_session.query(Package).filter_by(isp_id=isp_id)\
+        .order_by(Package.name)
+    return render_template("packages.html", isp=isp, packages=packages)
 
 
 @app.route("/isps/<int:isp_id>/new_package/", methods=["GET", "POST"])

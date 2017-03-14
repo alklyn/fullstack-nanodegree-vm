@@ -121,7 +121,7 @@ def new_package(isp_id):
                 isp_id=isp_id)
             db_session.add(package)
             db_session.commit()
-            flash("New ISP Successfully Created.")
+            flash("New Package Successfully Created.")
 
         return redirect(url_for('show_packages', isp_id=isp_id))
     else:
@@ -135,11 +135,22 @@ def edit_package(isp_id, package_id):
     """
     This page will be for editing packages in the database.
     """
-    isp = isps[isp_id - 1]
-    for package in packages:
-        if package["id"] == package_id:
-            break
-    return render_template("edit_package.html", isp=isp, package=package)
+    isp = db_session.query(ISP).filter_by(id=isp_id).one()
+    package = db_session.query(Package).filter_by(id=package_id).one()
+
+    if request.method == "POST":
+        if request.form["choice"] == "edit":
+            package.name = request.form["name"]
+            package.bandwidth = int(request.form["bandwidth"])
+            package.cap = int(request.form["cap"])
+            package.price = float(request.form["price"])
+            db_session.add(package)
+            db_session.commit()
+            flash("Package Updated.")
+
+        return redirect(url_for('show_packages', isp_id=isp_id))
+    else:
+        return render_template("edit_package.html", isp=isp, package=package)
 
 
 @app.route(

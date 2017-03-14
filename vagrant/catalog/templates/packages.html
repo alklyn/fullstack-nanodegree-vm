@@ -19,14 +19,12 @@
                         <a href="{{ url_for('new_package', isp_id=isp.id) }}">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                             Add New Package
-                        </a2>
+                        </a>
                     </div>
                     {% for package in packages %}
                     <div class="isp">
                         <h3>
-                            <a href="{{ url_for('show_packages', isp_id=isp.id) }}" >
-                                Name: {{ package.name }}
-                            </a>
+                            Name: {{ package.name }}
                         </h3>
                         <div>
                             Bandwith: {{ package.bandwidth }} Mbps

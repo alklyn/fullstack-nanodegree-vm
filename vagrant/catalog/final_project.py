@@ -107,11 +107,25 @@ def show_packages(isp_id):
 @app.route("/isps/<int:isp_id>/new_package/", methods=["GET", "POST"])
 def new_package(isp_id):
     """
-    This page will show a list of all the packages offered by the ISP.
+    This page will add a new package to the ISP identified by isp_id.
     """
-    isp = isps[isp_id - 1]
+    isp = db_session.query(ISP).filter_by(id=isp_id).one()
+    if request.method == "POST":
+        if request.form["choice"] == "create":
+            package = Package(
+                name=request.form["name"],
+                bandwidth=int(request.form["bandwidth"]),
+                cap=int(request.form["cap"]),
+                price=float(request.form["price"]),
+                user_id=user_id,
+                isp_id=isp_id)
+            db_session.add(package)
+            db_session.commit()
+            flash("New ISP Successfully Created.")
 
-    return render_template("new_package.html", isp=isp)
+        return redirect(url_for('show_packages', isp_id=isp_id))
+    else:
+        return render_template("new_package.html", isp=isp)
 
 
 @app.route(

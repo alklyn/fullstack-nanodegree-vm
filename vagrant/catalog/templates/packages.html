@@ -46,6 +46,11 @@
                                     Delete Package
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ url_for('packages_json', isp_id=isp.id, package_id=package.id) }}" >
+                                    View Package JSON
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     {% endfor %}

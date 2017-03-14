@@ -172,6 +172,35 @@ def delete_package(isp_id, package_id):
         return render_template("delete_package.html", isp=isp, package=package)
 
 
+@app.route("/isps/JSON/")
+def isps_json():
+    """
+    JSON API to view isps.
+    """
+    isps = db_session.query(ISP).order_by(ISP.name).all()
+    return jsonify(i=[isp.serialize for isp in isps])
+
+
+@app.route("/isps/<int:isp_id>/packages/JSON/")
+def packages_json(isp_id):
+    """
+    JSON API to view packages.
+    """
+    packages = db_session.query(Package).filter_by(isp_id=isp_id)\
+        .order_by(Package.name).all()
+    print(packages)
+    return jsonify(pacs=[package.serialize for package in packages])
+
+
+@app.route("/isps/<int:isp_id>/packages/<int:package_id>/JSON/")
+def package_json(isp_id, package_id):
+    """
+    JSON API to view a package identified by package_id.
+    """
+    package = db_session.query(Package).filter_by(id=package_id).one()
+    return jsonify(pac=package.serialize)
+
+
 if __name__ == "__main__":
     app.secret_key = "Ut0ndr1agr14*$hi7mh@7ayAk0*"
     app.debug = True

@@ -58,6 +58,7 @@ class Package(Base):
             "cap": self.cap,
             "price": self.price
         }
+        return data
 
 
 engine = create_engine('sqlite:///isp.db')

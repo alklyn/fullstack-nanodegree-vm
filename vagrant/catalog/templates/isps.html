@@ -36,7 +36,7 @@
                             Add New ISP
                         </a2>
                     </div>
-                    
+
                     {% for isp in isps %}
                     <div class="isp">
                         <h3>
@@ -53,6 +53,16 @@
                             <li>
                                 <a href="{{ url_for('delete_isp', isp_id=isp.id) }}" >
                                     Delete ISP
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('isps_json', isp_id=isp.id) }}" >
+                                    View ISP JSON
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('packages_json', isp_id=isp.id) }}" >
+                                    View Packages JSON
                                 </a>
                             </li>
                         </ul>

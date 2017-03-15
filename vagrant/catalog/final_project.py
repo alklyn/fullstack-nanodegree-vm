@@ -38,7 +38,7 @@ def show_isps():
     This page will show a list of all the ISPs in the database.
     """
     isps = db_session.query(ISP).order_by(ISP.name)
-    return render_template("isps.html", isps=isps)
+    return render_template("isps.html", isps=isps, location="home")
 
 
 @app.route("/isp/new/", methods=["GET", "POST"])

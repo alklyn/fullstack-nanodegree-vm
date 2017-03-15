@@ -14,3 +14,12 @@ body , .container-flex, .row{
 body {
     font-family: Copperplate / Copperplate Gothic Light, sans-serif;
 }
+
+.solid-border {
+    border: solid #337ab7;
+    border-width: 0 0 1px 0;
+}
+
+.flasher {
+    color: #33b77a;
+}

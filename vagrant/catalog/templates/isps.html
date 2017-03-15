@@ -4,9 +4,9 @@
     ISPs
 {% endblock %}
 
-    {% block heading %}
-        ISPs
-    {% endblock %}
+{% block heading %}
+    ISPs
+{% endblock %}
 
 {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -23,7 +23,7 @@
 {% endwith %}
 
 {% block add_item %}
-<div class="add-item">
+<div class="add-item solid-border">
     <a href="{{ url_for('new_isp') }}">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         Add New ISP
@@ -33,7 +33,7 @@
 
 {% block list_items %}
     {% for isp in isps %}
-    <div class="isp">
+    <div class="isp solid-border">
         <h3>
             <a href="{{ url_for('show_packages', isp_id=isp.id) }}" >
                 Name: {{ isp.name }}

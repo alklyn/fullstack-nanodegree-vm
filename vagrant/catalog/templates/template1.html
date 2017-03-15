@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+    ISPs
+{% endblock %}
+
+
+{% block content %}
+    <div class="container-flex">
+        <div class="row">
+            <div class="col-xs-12 col-xs-offset-0 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3>
+                            {% block heading %}
+                            {% endblock %}
+                        </h3>
+                    </div>
+
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <div class="flasher">
+                            <ul panel panel-info>
+                            {% for message in messages %}
+                                <li class="flasher">
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    {% endwith %}
+
+                    {% block add_item %}
+                    {% endblock %}
+
+                    {% block list_items %}
+                    {% endblock %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

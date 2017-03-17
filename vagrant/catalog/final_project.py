@@ -165,7 +165,7 @@ def delete_package(isp_id, package_id):
         if request.form["choice"] == "delete":
             db_session.delete(package)
             db_session.commit()
-            flash("Package Updated.")
+            flash("Package Deleted.")
 
         return redirect(url_for('show_packages', isp_id=isp_id))
     else:

@@ -13,6 +13,7 @@ body , .container-flex, .row{
 
 body {
     font-family: Copperplate / Copperplate Gothic Light, sans-serif;
+    margin-top: 4vh;
 }
 
 .solid-border {

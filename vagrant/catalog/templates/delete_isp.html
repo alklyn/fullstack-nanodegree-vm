@@ -1,26 +1,18 @@
-{% extends "base.html" %}
+{% extends "form_layout.html" %}
 
 {% block title %}
     Delete ISP
 {% endblock %}
 
+{% block heading %}
+    Delete "{{ isp.name }}"
+{% endblock %}
 
-{% block content %}
-    <div class="container-flex">
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h2>
-                            Delete {{ isp.name }}
-                        </h2>
-                    </div>
-                    <form method="post" action="{{ url_for('delete_isp', isp_id=isp.id) }}">
-                        <button class="btn btn-default" name="choice" value="delete"> Delete </button>
-                        <button class="btn btn-default" name="choice" value="cancel"> Cancel </button>
-                    </form>
-                </div>
-            </div>
+{% block form %}
+    <form method="post" action="{{ url_for('delete_isp', isp_id=isp.id) }}">
+        <div class="buttons">
+            <button class="btn btn-default" name="choice" value="delete"> Delete </button>
+            <button class="btn btn-default" name="choice" value="cancel"> Cancel </button>
         </div>
-    </div>
+    </form>
 {% endblock %}

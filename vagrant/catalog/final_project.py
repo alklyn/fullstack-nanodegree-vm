@@ -70,7 +70,6 @@ def fbconnect():
     # strip expire tag from access token
     token = result.split("&")[0]
 
-
     url = 'https://graph.facebook.com/v2.4/me?%s&fields=name,id,email' % token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
@@ -82,7 +81,8 @@ def fbconnect():
     session['email'] = data["email"]
     session['provider_uid'] = data["id"]
 
-    # The token must be stored in the session in order to properly logout, let's strip out the information before the equals sign in our token
+    # The token must be stored in the session in order to properly logout,
+    # let's strip out the information before the equals sign in our token
     stored_token = token.split("=")[1]
     session['access_token'] = stored_token
 
@@ -239,7 +239,7 @@ def disconnect():
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         flash("Logged out successfully.")
-        return redirect(url_for("restaurants"))
+        return redirect(url_for("show_isps"))
     else:
         response = make_response(
             json.dumps('Failed to revoke token for given user.', 400))
@@ -415,6 +415,36 @@ def package_json(isp_id, package_id):
     """
     package = db_session.query(Package).filter_by(id=package_id).one()
     return jsonify(pac=package.serialize)
+
+
+def create_user(session):
+    new_user = User(
+        name=session["username"],
+        email=session["email"],
+        picture=session["picture"])
+    db_session.add(new_user)
+    db_session.commit()
+
+    user = db_session.query(User).filter_by(email=session["email"]).one()
+    return user.id
+
+
+def get_user_info(user_id):
+    user = db_session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def get_user_id(email):
+    try:
+        user = db_session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
+
+
+@app.template_filter("capitalize_words")
+def capitalize_word(my_str):
+    return my_str.title()
 
 
 if __name__ == "__main__":

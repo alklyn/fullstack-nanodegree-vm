@@ -42,7 +42,7 @@ def show_login():
     Store it in the session for later validation.
     """
     state = "".join(random.choice(string.ascii_uppercase + string.digits)
-        for x in xrange(32))
+        for x in range(32))
     session["state"] = state
     return render_template("login.html", STATE=state)
 

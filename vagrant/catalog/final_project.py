@@ -450,4 +450,4 @@ def capitalize_word(my_str):
 if __name__ == "__main__":
     app.secret_key = "Ut0ndr1agr14*$hi7mh@7ayAk0*"
     app.debug = True
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=8080)

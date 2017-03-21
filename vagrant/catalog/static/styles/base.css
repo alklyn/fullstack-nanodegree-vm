@@ -18,7 +18,9 @@ body {
 
 .solid-border {
     border: solid #337ab7;
+    /* top | right | bottom | left */
     border-width: 0 0 1px 0;
+    padding: 1vh 2vw 1vh 2vw;
 }
 
 .flasher {

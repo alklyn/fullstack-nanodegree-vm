@@ -1,8 +1,21 @@
+.input-fields {
+    display: block;
+}
+
+form {
+    width: 100%;
+}
+
 label {
     /* top | right | bottom | left */
-    margin: 1vh 0 0 2vw;
-    max-width: inherit;
+    padding: 1vw 2vw;
+    width: inherit;
 }
+
+input {
+    float: right;
+}
+
 
 .buttons {
     margin: 2vh 0 4vh 4vw;
@@ -12,9 +25,6 @@ button + button {
     margin-left: 4vh;
 }
 
-input {
-    float: right;
-}
 
 .field-label {
     margin-right: 1vw;

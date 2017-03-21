@@ -54,7 +54,7 @@ def fbconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     access_token = request.data
-    print "access token received %s " % access_token
+    print("access token received {} ".format(access_token))
 
     app_id = json.loads(open('fb_client_secrets.json', 'r').read())[
         'web']['app_id']
@@ -158,7 +158,7 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
-        print "Token's client ID does not match app's."
+        print("Token's client ID does not match app's.")
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -201,7 +201,7 @@ def gconnect():
     output += session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("you are now logged in as %s" % session['username'])
-    print "done!"
+    print("done!")
     return output
 
 
@@ -209,11 +209,11 @@ def gconnect():
 def disconnect():
     print("provider: {}".format(session['provider']))
     access_token = session['access_token']
-    print 'In disconnect access token is %s', access_token
-    print 'User name is: '
-    print session['username']
+    print('In disconnect access token is {}'.format(access_token))
+    print('User name is: ')
+    print(session['username'])
     if access_token is None:
-        print 'Access Token is None'
+        print('Access Token is None')
         response = \
             make_response(json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
@@ -227,8 +227,8 @@ def disconnect():
 
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-    print 'result is '
-    print result
+    print('result is ')
+    print(result)
     if result['status'] == '200':
         del session['access_token']
         del session['provider_uid']
@@ -450,4 +450,4 @@ def capitalize_word(my_str):
 if __name__ == "__main__":
     app.secret_key = "Ut0ndr1agr14*$hi7mh@7ayAk0*"
     app.debug = True
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8000)

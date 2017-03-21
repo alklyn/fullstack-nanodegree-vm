@@ -254,7 +254,11 @@ def show_isps():
     This page will show a list of all the ISPs in the database.
     """
     isps = db_session.query(ISP).order_by(ISP.name)
-    return render_template("isps.html", isps=isps, location="home")
+    return render_template(
+        "isps.html",
+        isps=isps,
+        location="home",
+        title="ISPs")
 
 
 @app.route("/isp/new/", methods=["GET", "POST"])
@@ -270,7 +274,7 @@ def new_isp():
             flash("New ISP Successfully Created.")
         return redirect(url_for('show_isps'))
     else:
-        return render_template("new_isp.html")
+        return render_template("new_isp.html", title="New ISP")
 
 
 @app.route("/isps/<int:isp_id>/edit/", methods=["GET", "POST"])
@@ -287,7 +291,7 @@ def edit_isp(isp_id):
             flash("ISP Successfully Edited.")
         return redirect(url_for('show_isps'))
     else:
-        return render_template("edit_isp.html", isp=isp)
+        return render_template("edit_isp.html", isp=isp, title="Edit ISP")
 
 
 @app.route("/isps/<int:isp_id>/delete/", methods=["GET", "POST"])
@@ -303,7 +307,7 @@ def delete_isp(isp_id):
             flash("ISP Successfully Deleted.")
         return redirect(url_for('show_isps'))
     else:
-        return render_template("delete_isp.html", isp=isp)
+        return render_template("delete_isp.html", isp=isp, title="Delete ISP")
 
 
 @app.route("/isps/<int:isp_id>/")
@@ -315,7 +319,11 @@ def show_packages(isp_id):
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
     packages = db_session.query(Package).filter_by(isp_id=isp_id)\
         .order_by(Package.name)
-    return render_template("packages.html", isp=isp, packages=packages)
+    return render_template(
+        "packages.html",
+        isp=isp,
+        packages=packages,
+        title="Packages")
 
 
 @app.route("/isps/<int:isp_id>/new_package/", methods=["GET", "POST"])
@@ -339,7 +347,10 @@ def new_package(isp_id):
 
         return redirect(url_for('show_packages', isp_id=isp_id))
     else:
-        return render_template("new_package.html", isp=isp)
+        return render_template(
+            "new_package.html",
+            isp=isp,
+            title="New Package")
 
 
 @app.route(
@@ -364,7 +375,11 @@ def edit_package(isp_id, package_id):
 
         return redirect(url_for('show_packages', isp_id=isp_id))
     else:
-        return render_template("edit_package.html", isp=isp, package=package)
+        return render_template(
+            "edit_package.html",
+            isp=isp,
+            package=package,
+            title="Edit Package")
 
 
 @app.route(
@@ -385,7 +400,11 @@ def delete_package(isp_id, package_id):
 
         return redirect(url_for('show_packages', isp_id=isp_id))
     else:
-        return render_template("delete_package.html", isp=isp, package=package)
+        return render_template(
+            "delete_package.html",
+            isp=isp,
+            package=package,
+            title="Delete Package")
 
 
 @app.route("/isps/JSON/")

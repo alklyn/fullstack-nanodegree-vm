@@ -42,9 +42,9 @@ def show_login():
     Store it in the session for later validation.
     """
     state = "".join(random.choice(string.ascii_uppercase + string.digits)
-        for x in range(32))
+                    for x in range(32))
     session["state"] = state
-    return render_template("login.html", STATE=state)
+    return render_template("login.html", STATE=state, title="Login")
 
 
 @app.route('/fbconnect', methods=['POST'])
@@ -60,8 +60,7 @@ def fbconnect():
         'web']['app_id']
     app_secret = json.loads(
         open('fb_client_secrets.json', 'r').read())['web']['app_secret']
-    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id=%s&client_secret=%s&fb_exchange_token=%s' % (
-        app_id, app_secret, access_token)
+    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id={}&client_secret={}&fb_exchange_token={}'.format(app_id, app_secret, access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
 
@@ -87,7 +86,7 @@ def fbconnect():
     session['access_token'] = stored_token
 
     # Get user picture
-    url = 'https://graph.facebook.com/v2.4/me/picture?%s&redirect=0&height=200&width=200' % token
+    url = 'https://graph.facebook.com/v2.4/me/picture?{}&redirect=0&height=200&width=200'.format(token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     data = json.loads(result)

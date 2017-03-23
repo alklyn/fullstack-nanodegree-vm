@@ -1,13 +1,5 @@
 {% extends "form_layout.html" %}
 
-{% block title %}
-    New ISP
-{% endblock %}
-
-{% block heading %}
-    Create New ISP
-{% endblock %}
-
 {% block form %}
     <form method="post" action="{{ url_for('new_isp') }}">
         <label>

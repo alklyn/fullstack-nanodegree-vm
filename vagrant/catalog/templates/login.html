@@ -92,23 +92,23 @@
 
                     <!--FACEBOOK SIGN IN -->
                     <script>
-                      window.fbAsyncInit = function() {
-                      FB.init({
-                        appId      : '326785684386126',
-                        cookie     : true,  // enable cookies to allow the server to access
-                                            // the session
-                        xfbml      : true,  // parse social plugins on this page
-                        version    : 'v2.2' // use version 2.2
-                      });
-                      };
-                      // Load the SDK asynchronously
-                      (function(d, s, id) {
-                        var js, fjs = d.getElementsByTagName(s)[0];
-                        if (d.getElementById(id)) return;
-                        js = d.createElement(s); js.id = id;
-                        js.src = "//connect.facebook.net/en_US/sdk.js";
-                        fjs.parentNode.insertBefore(js, fjs);
-                      }(document, 'script', 'facebook-jssdk'));
+                          window.fbAsyncInit = function() {
+                            FB.init({
+                              appId      : '419270578431286',
+                              cookie     : true,
+                              xfbml      : true,
+                              version    : 'v2.8'
+                            });
+                            FB.AppEvents.logPageView();
+                          };
+
+                          (function(d, s, id){
+                             var js, fjs = d.getElementsByTagName(s)[0];
+                             if (d.getElementById(id)) {return;}
+                             js = d.createElement(s); js.id = id;
+                             js.src = "//connect.facebook.net/en_US/sdk.js";
+                             fjs.parentNode.insertBefore(js, fjs);
+                           }(document, 'script', 'facebook-jssdk'));
 
                       // Here we run a very simple test of the Graph API after login is
                       // successful.  See statusChangeCallback() for when this call is made.
@@ -129,7 +129,7 @@
                             if (result) {
                               $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
                              setTimeout(function() {
-                              window.location.href = "/restaurants/";
+                              window.location.href = "/";
                              }, 4000);
 
                           } else {

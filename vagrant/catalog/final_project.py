@@ -31,7 +31,12 @@ APPLICATION_NAME = "Restaurant Menu Application"
 
 @app.before_request
 def csrf_protect():
-    if request.method == "POST":
+    """
+    Check for CSRF token before processing all POST requests except for login
+    via oauth.
+    """
+    if request.method == "POST" and 'user_id' not in session and\
+        request.endpoint != 'gconnect' and request.endpoint != 'fbconnect':
         token = session.pop('_csrf_token', None)
         if not token or token != request.form.get('_csrf_token'):
             abort(403)
@@ -78,11 +83,11 @@ def fbconnect():
     result = h.request(url, 'GET')[1]
 
     # Use token to get user info from API
-    userinfo_url = "https://graph.facebook.com/v2.4/me"
+    userinfo_url = "https://graph.facebook.com/v2.8/me"
     # strip expire tag from access token
     token = result.split("&")[0]
 
-    url = 'https://graph.facebook.com/v2.4/me?%s&fields=name,id,email' % token
+    url = 'https://graph.facebook.com/v2.8/me?%s&fields=name,id,email' % token
     h = httplib2.Http()
     result = h.request(url, 'GET')[1]
     # print "url sent for API access:%s"% url

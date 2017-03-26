@@ -26,7 +26,7 @@ user_id = 1
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
-APPLICATION_NAME = "Restaurant Menu Application"
+APPLICATION_NAME = "ISP List"
 
 
 @app.before_request

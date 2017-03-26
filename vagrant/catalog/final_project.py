@@ -266,7 +266,7 @@ def new_isp():
     This page will be for adding a new ISP to the database.
     """
     if "username" not in session:
-        flash("You must login to access this page.")
+        flash("You must login to to make any changes.")
         return redirect("/login/")
 
     if request.method == "POST":
@@ -286,6 +286,14 @@ def edit_isp(isp_id):
     This page will be for editing ISPs in the database.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
+
+    if "user_id" not in session:
+        flash("You must login to to make any changes.")
+        return redirect("/login/")
+    elif int(session["user_id"]) != isp.user_id:
+        flash("Only the creator can edit or delete an ISP.")
+        return redirect("/")
+
     if request.method == "POST":
         if request.form["choice"] == "edit":
             isp.name = request.form["name"]
@@ -303,6 +311,14 @@ def delete_isp(isp_id):
     This page will be for deleting ISPs in the database.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
+
+    if "user_id" not in session:
+        flash("You must login to to make any changes.")
+        return redirect("/login/")
+    elif int(session["user_id"]) != isp.user_id:
+        flash("Only the creator can edit or delete an ISP.")
+        return redirect("/")
+
     if request.method == "POST":
         if request.form["choice"] == "delete":
             db_session.delete(isp)

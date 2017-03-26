@@ -19,6 +19,18 @@
                         {% include "nav.html" %}
                     </div>
 
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <div class="solid-border">
+                            {% for message in messages %}
+                                <div class="flasher">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    {% endwith %}
+
                     {% block form %}
                     {% endblock %}
 

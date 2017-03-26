@@ -260,11 +260,15 @@ def show_isps():
         title="ISPs")
 
 
-@app.route("/isp/new/", methods=["GET", "POST"])
+@app.route("/isps/new/", methods=["GET", "POST"])
 def new_isp():
     """
     This page will be for adding a new ISP to the database.
     """
+    if "username" not in session:
+        flash("You must login to access this page.")
+        return redirect("/login/")
+
     if request.method == "POST":
         if request.form["choice"] == "create":
             isp = ISP(name=request.form["name"], user_id=user_id)
@@ -412,7 +416,7 @@ def isps_json():
     JSON API to view isps.
     """
     isps = db_session.query(ISP).order_by(ISP.name).all()
-    return jsonify(i=[isp.serialize for isp in isps])
+    return jsonify(isp_list=[isp.serialize for isp in isps])
 
 
 @app.route("/isps/<int:isp_id>/packages/JSON/")
@@ -422,8 +426,7 @@ def packages_json(isp_id):
     """
     packages = db_session.query(Package).filter_by(isp_id=isp_id)\
         .order_by(Package.name).all()
-    print(packages)
-    return jsonify(pacs=[package.serialize for package in packages])
+    return jsonify(package_list=[package.serialize for package in packages])
 
 
 @app.route("/isps/<int:isp_id>/packages/<int:package_id>/JSON/")

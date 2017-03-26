@@ -4,7 +4,7 @@
     <form method="post" action="{{ url_for('new_isp') }}">
         <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
         <label>
-            Name
+            Name:
             <input type="text" name="name">
         </label>
         <div class="buttons">

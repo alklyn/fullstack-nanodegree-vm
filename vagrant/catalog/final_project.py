@@ -489,11 +489,8 @@ def get_user_info(user_id):
 
 
 def get_user_id(email):
-    try:
-        user = db_session.query(User).filter_by(email=email).one()
-        return user.id
-    except:
-        return None
+    user = db_session.query(User).filter_by(email=email).one()
+    return user.id
 
 
 @app.template_filter("capitalize_words")

@@ -2,11 +2,11 @@
 A simple catalog app
 
 **Built With** :
-* Flask - The web framework used.
-* Jinja2 - The templating engine used.
-* Sqlite3 - The database used.
-* Bootstrap - The CSS framework used.
-* Python2.7 - The server side scripting language used.
+* [Flask](http://flask.pocoo.org/) - The web framework used.
+* [Jinja2](http://jinja.pocoo.org/docs/2.9/) - The templating engine used.
+* [Sqlite3](https://www.sqlite.org/download.html) - The database used.
+* [Bootstrap](https://getbootstrap.com/) - The CSS framework used.
+* [Python2.7](https://www.python.org/downloads/release/python-2712/) - The server side scripting language used.
 * [Glyphicon](http://glyphicons.com/) - The icon pack used.
 
 

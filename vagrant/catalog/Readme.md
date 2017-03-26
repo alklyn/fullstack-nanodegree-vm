@@ -1,5 +1,6 @@
 # What is it
-A simple catalog app
+A simple RESTful web catalog app using the Python framework Flask along which
+uses third-party (Google & Facebook) OAuth authentication.
 
 **Built With** :
 * [Flask](http://flask.pocoo.org/) - The web framework used.
@@ -8,6 +9,8 @@ A simple catalog app
 * [Bootstrap](https://getbootstrap.com/) - The CSS framework used.
 * [Python2.7](https://www.python.org/downloads/release/python-2712/) - The server side scripting language used.
 * [Glyphicon](http://glyphicons.com/) - The icon pack used.
+* [Vagrant](https://www.vagrantup.com/) - Development enviroment.
+* [VirtualBox](https://www.virtualbox.org/) - Desktop virtualization sotware.
 
 
 ## Installation

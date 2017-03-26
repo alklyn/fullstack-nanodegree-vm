@@ -10,6 +10,7 @@
 
 {% block form %}
     <form method="post" action="{{ url_for('new_package', isp_id=isp.id) }}">
+        <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
         <div class="input-fields">
             <label>
                 <span class="caption">Name:</span>

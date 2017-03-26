@@ -1,8 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect, flash
-from flask import jsonify
-from flask import session
-from flask import make_response
-
+from flask import jsonify, session, make_response, abort
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -10,14 +7,11 @@ import json
 import requests
 import random
 import string
-
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
 import json
-from flask import make_response
 import requests
-
 from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, ISP, Package, User
@@ -33,6 +27,25 @@ user_id = 1
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Restaurant Menu Application"
+
+
+@app.before_request
+def csrf_protect():
+    if request.method == "POST":
+        token = session.pop('_csrf_token', None)
+        if not token or token != request.form.get('_csrf_token'):
+            abort(403)
+
+
+def generate_csrf_token():
+    if '_csrf_token' not in session:
+        session['_csrf_token'] = "".\
+            join(random.choice(string.ascii_uppercase + string.digits)
+                 for x in range(128))
+    return session['_csrf_token']
+
+
+app.jinja_env.globals['csrf_token'] = generate_csrf_token
 
 
 @app.route("/login/")

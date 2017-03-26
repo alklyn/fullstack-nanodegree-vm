@@ -5,12 +5,15 @@
 {% endblock %}
 
 {% block add_item %}
-<div class="add-item solid-border">
-    <a href="{{ url_for('new_package', isp_id=isp.id) }}">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        Add New Package
-    </a>
-</div>
+    {# Only the creater of an ISP should be able to add new packages to it #}
+    {% if session.user_id == isp.user_id %}
+        <div class="add-item solid-border">
+            <a href="{{ url_for('new_package', isp_id=isp.id) }}">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                Add New Package
+            </a>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block list_items %}
@@ -29,16 +32,18 @@
                 Price: ${{ package.price }}
             </div>
             <ul>
-                <li>
-                    <a href="{{ url_for('edit_package', isp_id=isp.id, package_id=package.id) }}" >
-                        Edit Package
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url_for('delete_package', isp_id=isp.id, package_id=package.id) }}" >
-                        Delete Package
-                    </a>
-                </li>
+                {% if session.user_id == isp.user_id %}
+                    <li>
+                        <a href="{{ url_for('edit_package', isp_id=isp.id, package_id=package.id) }}" >
+                            Edit Package
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('delete_package', isp_id=isp.id, package_id=package.id) }}" >
+                            Delete Package
+                        </a>
+                    </li>
+                {% endif %}
                 <li>
                     <a href="{{ url_for('packages_json', isp_id=isp.id, package_id=package.id) }}" >
                         View Package JSON

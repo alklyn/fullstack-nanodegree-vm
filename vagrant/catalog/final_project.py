@@ -336,6 +336,7 @@ def show_packages(isp_id):
     This page will show a list of all the packages offered by the ISP.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
+
     packages = db_session.query(Package).filter_by(isp_id=isp_id)\
         .order_by(Package.name)
     return render_template(
@@ -380,6 +381,14 @@ def edit_package(isp_id, package_id):
     This page will be for editing packages in the database.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
+
+    if "user_id" not in session:
+        flash("You must login to to make any changes.")
+        return redirect("/login/")
+    elif int(session["user_id"]) != isp.user_id:
+        flash("Only the creator can edit/delete a package.")
+        return redirect("/")
+
     package = db_session.query(Package).filter_by(id=package_id).one()
 
     if request.method == "POST":
@@ -409,6 +418,14 @@ def delete_package(isp_id, package_id):
     This page will be for deleting packages in the database.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
+
+    if "user_id" not in session:
+        flash("You must login to to make any changes.")
+        return redirect("/login/")
+    elif int(session["user_id"]) != isp.user_id:
+        flash("Only the creator can edit/delete a package.")
+        return redirect("/")
+
     package = db_session.query(Package).filter_by(id=package_id).one()
 
     if request.method == "POST":

@@ -14,6 +14,7 @@ import json
 import requests
 from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.exc import NoResultFound
 from database_setup import Base, ISP, Package, User
 
 engine = create_engine("sqlite:///isp.db")
@@ -507,7 +508,11 @@ def get_user_info(user_id):
 
 
 def get_user_id(email):
-    user = db_session.query(User).filter_by(email=email).one()
+    try:
+        user = db_session.query(User).filter_by(email=email).one()
+    except NoResultFound:
+        print("Creating new user.")
+        return None
     return user.id
 
 

@@ -15,6 +15,7 @@ import requests
 from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
+from functools import wraps
 from database_setup import Base, ISP, Package, User
 
 engine = create_engine("sqlite:///isp.db")
@@ -30,14 +31,29 @@ CLIENT_ID = json.loads(
 APPLICATION_NAME = "ISP List"
 
 
+def login_required(f):
+    """
+    Check that that a user is authorized to view the page.
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user_id" not in session:
+            flash("You must be logged in make any changes.")
+            return redirect(url_for('show_login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @app.before_request
 def csrf_protect():
     """
     Check for CSRF token before processing all POST requests except for login
     via oauth.
     """
-    if request.method == "POST" and 'user_id' not in session and\
-        request.endpoint != 'gconnect' and request.endpoint != 'fbconnect':
+    if request.endpoint == 'gconnect' or request.endpoint == 'fbconnect':
+        return
+
+    if request.method == "POST":
         token = session.pop('_csrf_token', None)
         if not token or token != request.form.get('_csrf_token'):
             abort(403)
@@ -280,14 +296,11 @@ def show_isps():
 
 
 @app.route("/isps/new/", methods=["GET", "POST"])
+@login_required
 def new_isp():
     """
     This page will be for adding a new ISP to the database.
     """
-    if "username" not in session:
-        flash("You must login to to make any changes.")
-        return redirect("/login/")
-
     if request.method == "POST":
         if request.form["choice"] == "create":
             isp = ISP(name=request.form["name"], user_id=user_id)
@@ -300,16 +313,14 @@ def new_isp():
 
 
 @app.route("/isps/<int:isp_id>/edit/", methods=["GET", "POST"])
+@login_required
 def edit_isp(isp_id):
     """
     This page will be for editing ISPs in the database.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
 
-    if "user_id" not in session:
-        flash("You must login to to make any changes.")
-        return redirect("/login/")
-    elif int(session["user_id"]) != isp.user_id:
+    if int(session["user_id"]) != isp.user_id:
         flash("Only the creator can edit or delete an ISP.")
         return redirect("/")
 
@@ -325,16 +336,14 @@ def edit_isp(isp_id):
 
 
 @app.route("/isps/<int:isp_id>/delete/", methods=["GET", "POST"])
+@login_required
 def delete_isp(isp_id):
     """
     This page will be for deleting ISPs in the database.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
 
-    if "user_id" not in session:
-        flash("You must login to to make any changes.")
-        return redirect("/login/")
-    elif int(session["user_id"]) != isp.user_id:
+    if int(session["user_id"]) != isp.user_id:
         flash("Only the creator can edit or delete an ISP.")
         return redirect("/")
 
@@ -366,11 +375,16 @@ def show_packages(isp_id):
 
 
 @app.route("/isps/<int:isp_id>/new_package/", methods=["GET", "POST"])
+@login_required
 def new_package(isp_id):
     """
     This page will add a new package to the ISP identified by isp_id.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
+    if int(session["user_id"]) != isp.user_id:
+        flash("Only the creator can edit or delete an ISP.")
+        return redirect("/")
+
     if request.method == "POST":
         if request.form["choice"] == "create":
             package = Package(
@@ -395,16 +409,14 @@ def new_package(isp_id):
 @app.route(
     "/isps/<int:isp_id>/packages/<int:package_id>/edit/",
     methods=["GET", "POST"])
+@login_required
 def edit_package(isp_id, package_id):
     """
     This page will be for editing packages in the database.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
 
-    if "user_id" not in session:
-        flash("You must login to to make any changes.")
-        return redirect("/login/")
-    elif int(session["user_id"]) != isp.user_id:
+    if int(session["user_id"]) != isp.user_id:
         flash("Only the creator can edit/delete a package.")
         return redirect("/")
 
@@ -432,16 +444,14 @@ def edit_package(isp_id, package_id):
 @app.route(
     "/isps/<int:isp_id>/packages/<int:package_id>/delete/",
     methods=["GET", "POST"])
+@login_required
 def delete_package(isp_id, package_id):
     """
     This page will be for deleting packages in the database.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
 
-    if "user_id" not in session:
-        flash("You must login to to make any changes.")
-        return redirect("/login/")
-    elif int(session["user_id"]) != isp.user_id:
+    if int(session["user_id"]) != isp.user_id:
         flash("Only the creator can edit/delete a package.")
         return redirect("/")
 

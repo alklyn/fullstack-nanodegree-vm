@@ -24,7 +24,6 @@ DBSession = sessionmaker(bind=engine)
 db_session = DBSession()
 
 app = Flask(__name__)
-user_id = 1
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']

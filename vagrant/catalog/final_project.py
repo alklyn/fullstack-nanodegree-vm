@@ -302,11 +302,11 @@ def new_isp():
     """
     if request.method == "POST":
         if request.form["choice"] == "create":
-            isp = ISP(name=request.form["name"], user_id=user_id)
+            isp = ISP(name=request.form["name"], user_id=session["user_id"])
             db_session.add(isp)
             db_session.commit()
             flash("New ISP Successfully Created.")
-        return redirect(url_for('show_isps'))
+        return redirect(url_for("show_isps"))
     else:
         return render_template("new_isp.html", title="New ISP")
 
@@ -329,7 +329,7 @@ def edit_isp(isp_id):
             db_session.add(isp)
             db_session.commit()
             flash("ISP Successfully Edited.")
-        return redirect(url_for('show_isps'))
+        return redirect(url_for("show_isps"))
     else:
         return render_template("edit_isp.html", isp=isp, title="Edit ISP")
 
@@ -351,7 +351,7 @@ def delete_isp(isp_id):
             db_session.delete(isp)
             db_session.commit()
             flash("ISP Successfully Deleted.")
-        return redirect(url_for('show_isps'))
+        return redirect(url_for("show_isps"))
     else:
         return render_template("delete_isp.html", isp=isp, title="Delete ISP")
 
@@ -373,7 +373,7 @@ def show_packages(isp_id):
         title="Packages")
 
 
-@app.route("/isps/<int:isp_id>/new_package/", methods=["GET", "POST"])
+@app.route("/isps/<int:isp_id>/packages/new/", methods=["GET", "POST"])
 @login_required
 def new_package(isp_id):
     """
@@ -391,7 +391,7 @@ def new_package(isp_id):
                 bandwidth=int(request.form["bandwidth"]),
                 cap=int(request.form["cap"]),
                 price=float(request.form["price"]),
-                user_id=user_id,
+                user_id=session["user_id"],
                 isp_id=isp_id)
             db_session.add(package)
             db_session.commit()

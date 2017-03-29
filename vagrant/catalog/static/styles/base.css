@@ -26,3 +26,19 @@ body {
 .flasher {
     color: #33b77a;
 }
+
+.login {
+    padding: 15%;
+}
+
+@media (max-width: 899px) {
+    .login {
+        padding: 15%;
+    }
+}
+
+@media (min-width: 900px) {
+    .login {
+        padding: 20%;
+    }
+}

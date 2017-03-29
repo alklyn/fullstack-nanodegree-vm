@@ -1,6 +1,6 @@
 # What is it
 A simple RESTful web catalog app using the Python framework Flask along which
-uses third-party (Google & Facebook) OAuth authentication.
+uses third-party (Google) OAuth authentication.
 
 **Built With** :
 * [Flask](http://flask.pocoo.org/) - The web framework used.

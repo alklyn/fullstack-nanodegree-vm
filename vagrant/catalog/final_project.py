@@ -16,6 +16,7 @@ from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 from functools import wraps
+import ast
 from database_setup import Base, ISP, Package, User
 
 engine = create_engine("sqlite:///isp.db")
@@ -79,71 +80,6 @@ def show_login():
                     for x in range(32))
     session["state"] = state
     return render_template("login.html", STATE=state, title="Login")
-
-
-@app.route('/fbconnect', methods=['POST'])
-def fbconnect():
-    if request.args.get('state') != session['state']:
-        response = make_response(json.dumps('Invalid state parameter.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-    access_token = request.data
-    print("access token received {} ".format(access_token))
-
-    app_id = json.loads(open('fb_client_secrets.json', 'r').read())[
-        'web']['app_id']
-    app_secret = json.loads(
-        open('fb_client_secrets.json', 'r').read())['web']['app_secret']
-    url = 'https://graph.facebook.com/oauth/access_token?grant_type=fb_exchange_token&client_id={}&client_secret={}&fb_exchange_token={}'.format(app_id, app_secret, access_token)
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[1]
-
-    # Use token to get user info from API
-    userinfo_url = "https://graph.facebook.com/v2.8/me"
-    # strip expire tag from access token
-    token = result.split("&")[0]
-
-    url = 'https://graph.facebook.com/v2.8/me?%s&fields=name,id,email' % token
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[1]
-    # print "url sent for API access:%s"% url
-    # print "API JSON result: %s" % result
-    data = json.loads(result)
-    session['provider'] = 'facebook'
-    session['username'] = data["name"]
-    session['email'] = data["email"]
-    session['provider_uid'] = data["id"]
-
-    # The token must be stored in the session in order to properly logout,
-    # let's strip out the information before the equals sign in our token
-    stored_token = token.split("=")[1]
-    session['access_token'] = stored_token
-
-    # Get user picture
-    url = 'https://graph.facebook.com/v2.4/me/picture?{}&redirect=0&height=200&width=200'.format(token)
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[1]
-    data = json.loads(result)
-
-    session['picture'] = data["data"]["url"]
-
-    # see if user exists
-    user_id = get_user_id(session['email'])
-    if not user_id:
-        user_id = create_user(session)
-    session['user_id'] = user_id
-
-    output = ''
-    output += '<h1>Welcome, '
-    output += session['username']
-
-    output += '!</h1>'
-    output += '<img src="'
-    output += session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
-
-    flash("Now logged in as %s" % session['username'])
-    return output
 
 
 @app.route('/gconnect', methods=['POST'])
@@ -226,14 +162,17 @@ def gconnect():
     if session['user_id'] is None:
         session['user_id'] = create_user(session)
 
-    output = ''
-    output += '<h1>Welcome, '
-    output += session['username']
-    output += '!</h1>'
-    output += '<img src="'
-    output += session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
-    flash("you are now logged in as %s" % session['username'])
+    output = """
+        <h3>Welcome, {}!</h3>
+        <img src="{}"
+            style = "width: 150px;
+                height: 150px;
+                border-radius: 80px;
+                -webkit-border-radius: 150px;
+                -moz-border-radius: 150px;">
+    """.format(session['username'], session['picture'])
+
+    flash("You are now logged in as {}".format(session['username'].title()))
     print("done!")
     return output
 

@@ -36,11 +36,22 @@ def login_required(f):
     Check that that a user is authorized to view the page.
     """
     @wraps(f)
-    def decorated_function(*args, **kwargs):
+    def decorated_function(**kw):
         if "user_id" not in session:
             flash("You must be logged in make any changes.")
             return redirect(url_for('show_login', next=request.url))
-        return f(*args, **kwargs)
+
+        if request.endpoint == 'edit_isp' or\
+           request.endpoint == 'delete_isp' or\
+           request.endpoint == 'new_package' or\
+           request.endpoint == 'edit_package' or\
+           request.endpoint == 'delete_package':
+                isp = db_session.query(ISP).filter_by(id=kw["isp_id"]).one()
+                if int(session["user_id"]) != isp.user_id:
+                    flash("Only the creator can make changes to an ISP!")
+                    return redirect("/")
+
+        return f(**kw)
     return decorated_function
 
 
@@ -235,7 +246,7 @@ def show_isps():
 
 @app.route("/isps/new/", methods=["GET", "POST"])
 @login_required
-def new_isp():
+def new_isp(**kw):
     """
     This page will be for adding a new ISP to the database.
     """
@@ -258,10 +269,6 @@ def edit_isp(isp_id):
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
 
-    if int(session["user_id"]) != isp.user_id:
-        flash("Only the creator can edit or delete an ISP.")
-        return redirect("/")
-
     if request.method == "POST":
         if request.form["choice"] == "edit":
             isp.name = request.form["name"]
@@ -280,10 +287,6 @@ def delete_isp(isp_id):
     This page will be for deleting ISPs in the database.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
-
-    if int(session["user_id"]) != isp.user_id:
-        flash("Only the creator can edit or delete an ISP.")
-        return redirect("/")
 
     if request.method == "POST":
         if request.form["choice"] == "delete":
@@ -319,9 +322,6 @@ def new_package(isp_id):
     This page will add a new package to the ISP identified by isp_id.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
-    if int(session["user_id"]) != isp.user_id:
-        flash("Only the creator can edit or delete an ISP.")
-        return redirect("/")
 
     if request.method == "POST":
         if request.form["choice"] == "create":
@@ -353,11 +353,6 @@ def edit_package(isp_id, package_id):
     This page will be for editing packages in the database.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
-
-    if int(session["user_id"]) != isp.user_id:
-        flash("Only the creator can edit/delete a package.")
-        return redirect("/")
-
     package = db_session.query(Package).filter_by(id=package_id).one()
 
     if request.method == "POST":
@@ -388,11 +383,6 @@ def delete_package(isp_id, package_id):
     This page will be for deleting packages in the database.
     """
     isp = db_session.query(ISP).filter_by(id=isp_id).one()
-
-    if int(session["user_id"]) != isp.user_id:
-        flash("Only the creator can edit/delete a package.")
-        return redirect("/")
-
     package = db_session.query(Package).filter_by(id=package_id).one()
 
     if request.method == "POST":

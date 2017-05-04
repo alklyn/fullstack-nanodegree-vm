@@ -60,6 +60,6 @@ class Package(Base):
         }
         return data
 
-
-engine = create_engine('sqlite:///isp.db')
+# The string form of the URL is dialect[+driver]://user:password@host/dbname
+engine = create_engine('postgresql://catalogger:gIrHaUcRe3@localhost/isp')
 Base.metadata.create_all(engine)
